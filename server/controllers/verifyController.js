@@ -1,0 +1,158 @@
+import { User, TempUser } from "../models/userModel.js";
+import jwt from "jsonwebtoken";
+import { createCookie } from "../hooks/jwtCookie.js";
+import {
+  generateRandomSixDigitNumber,
+  verifyEmail,
+} from "../hooks/verifyCodeGen.js";
+
+// const MAX_AGE = 180000;
+
+///////////// login user
+const requestCode = async (req, res) => {
+  const newExpireTime = new Date(Date.now() + 180 * 1000);
+  const newCode = generateRandomSixDigitNumber();
+  const verifyToken = req.cookies.verifyToken;
+  // console.log(verifyToken);
+  if (!verifyToken) return res.status(401).json("Unauthorized no vToken"); // this doesn't allow the refresh token to work!
+
+  if (verifyToken) {
+    jwt.verify(
+      verifyToken,
+      process.env.ACCESS_TOKEN_SECRET,
+      async (err, decodedToken) => {
+        if (err)
+          return res
+            .status(401)
+            .json(
+              "Unauthorized no verify token. Please go back and sign-up again."
+            );
+        const tempUser = await TempUser.findById(decodedToken._id);
+        if (tempUser) {
+          const user = await TempUser.findByIdAndUpdate(
+            decodedToken._id,
+            {
+              verificationCode: { vCode: newCode, expireAt: newExpireTime },
+            },
+            { new: true }
+          );
+
+          // console.log(user);
+          console.log(newCode);
+          return res
+            .status(200)
+            .json({ msg: "New Code created and updated in db." });
+        }
+
+        const user = await User.findByIdAndUpdate(
+          decodedToken._id,
+          {
+            verificationCode: { vCode: newCode, expireAt: newExpireTime },
+          },
+          { new: true }
+        );
+        console.log(user);
+        console.log(newCode);
+        // verifyEmail(newCode);
+
+        res.status(200).json({ msg: "New Code created and updated in db." });
+      }
+    );
+  }
+};
+
+const verifyCode = async (req, res) => {
+  const userCode = await req.body.userCode; // user verification code
+  //   console.log("user completed code is: ", userCode);
+  const verifyToken = await req.cookies.verifyToken; // id of user
+  if (!verifyToken) return res.status(401).json("Unauthorized no verify token");
+
+  if (verifyToken) {
+    jwt.verify(
+      verifyToken,
+      process.env.ACCESS_TOKEN_SECRET,
+      async (err, decodedToken) => {
+        if (err) return res.status(401);
+
+        // this is if user is trying to login using same email as their google login
+        const tempUser = await TempUser.findById(decodedToken._id);
+        if (tempUser) {
+          if (tempUser.verificationCode.vCode != userCode) {
+            return res
+              .status(400)
+              .json(
+                "Incorrect code. Either request for another code or try again."
+              );
+          }
+
+          if (tempUser.verificationCode.vCode == userCode) {
+            // this is updating original google user with temp data
+            const user = await User.findByIdAndUpdate(tempUser.googleUserId, {
+              password: tempUser.password,
+              verified: true,
+            });
+
+            createCookie(user._id, "token", res);
+            res.clearCookie("verifyToken");
+            // after updating google user info, delete tempuser
+            tempUser.deleteOne();
+            return res.status(200).json({
+              msg: "Updated existing google user thus linked with sign in.",
+            });
+          }
+        }
+
+        const user = await User.findById(decodedToken._id);
+        if (user.verificationCode.vCode != userCode) {
+          return res
+            .status(400)
+            .json(
+              "Incorrect code. Either request for another code or try again."
+            );
+          //   res.status(400).json({ errorMsg: "Incorrect Code, this is test" });
+        }
+        // here vcode has to equal usercode, thus use 'set' to update
+        else {
+          user.set({
+            verified: true,
+            verificationCode: null, // this cancels user deletion by expire
+          });
+          // saving updates to retrieved user
+          const updatedUser = await user.save();
+
+          // create a cookie of updatedUser.id for authCheck and retrieval for user data for dashboard
+          createCookie(updatedUser._id, "token", res);
+          res.clearCookie("verifyToken");
+
+          res.status(200).json({ msg: "New Code created and updated in db." });
+        }
+      }
+    );
+  }
+};
+
+const verifyPage = async (req, res, next) => {
+  const verifyToken = await req.cookies.verifyToken; // id of user
+  if (!verifyToken) return res.status(401).json("Unauthorized no verify token");
+
+  if (verifyToken) {
+    jwt.verify(
+      verifyToken,
+      process.env.ACCESS_TOKEN_SECRET,
+      async (err, decodedToken) => {
+        // error in token return 401
+        if (err) return res.status(401);
+        // use decoded id to find temp user before they completed verification
+        const tempUser = await User.findById(decodedToken._id);
+        // use found user to send "true" to F.E. for ACCESS_V_PAGE to be true
+        if (tempUser) req.tempUser = true;
+        // if no tempUser despite verifyToken being present return false/401
+        else return res.status(401);
+
+        next();
+      }
+    );
+  }
+};
+
+export { requestCode, verifyCode, verifyPage };

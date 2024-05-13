@@ -1,0 +1,429 @@
+#root {
+  /* max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem; */
+  text-align: center;
+  margin: auto;
+}
+
+:root {
+  --ten: rgba(235, 127, 15, 1);
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+.wrapper {
+  height: 100vh;
+  height: 100svh;
+  width: 100vw;
+  width: 100svw;
+}
+
+.mt1 {
+  margin-top: 1rem !important;
+}
+
+.intro {
+  padding-top: 10rem;
+}
+
+.loginSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.authTypes {
+  /* background-color: red; */
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.authTypes > div {
+  /* background-color: red; */
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  margin: 0 10px;
+  width: 140px;
+  cursor: pointer;
+}
+
+.authTypes > div:hover {
+  opacity: .8;
+}
+
+.gg {
+  background-color: rgb(1, 177, 7);
+}
+
+.fb {
+  background-color: rgb(0, 89, 255);
+}
+
+.gh {
+  background-color: black;
+  color: white;
+}
+
+.fa-lock {
+  animation-duration: 5s;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  /* margin: 0 10px; */
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--ten);
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+label {
+  align-self: center;
+  text-align: right;
+}
+
+.formInputs {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  /* grid-template-columns: repeat(2, 1fr); */
+  /* margin-bottom: 30px; */
+}
+
+.pwd, .pwd2, .user, .email {
+  padding: 10px;
+  margin: auto;
+  width: 50%;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+.show {
+  visibility: visible !important;
+}
+
+.revealPsw {
+  position: relative;
+}
+
+.fa-eye {
+  visibility: hidden;
+}
+
+.fa-eye-slash, .fa-eye {
+  position: absolute;
+  margin-left: 1rem;
+  top: 30%;
+}
+
+.fa-eye-slash:hover, .fa-eye:hover {
+  cursor: pointer;
+}
+
+.formInputs > button, a {
+  /* margin: 10%; */
+  margin: auto;
+  width: 110px;
+}
+
+.loginSection > .inputContainer > .formInputs > button:nth-last-of-type(1) {
+  grid-column: 2;
+  padding: 0;
+  width: fit-content;
+  background: transparent;
+  margin-top: 1rem;
+}
+
+.formInputs > button:nth-last-of-type(1):hover {
+  color: skyblue;
+}
+
+.formInputs > a > button {
+  width: 92%;
+}
+
+.formInputs > p {
+  width: 80%;
+  font-size: 12px;
+  grid-column: 2;
+  margin: auto;
+}
+
+button:hover {
+  /* border-color: #646cff; */
+  background-color: rgb(199, 199, 199);
+  color: black;
+}
+
+/* button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+} */
+
+.fa-arrow-right-to-bracket {
+  margin-bottom: 40px;
+  --fa-animation-duration: 5s;
+}
+
+.inputContainer {
+  position: relative;
+}
+
+.inputContainer:has(.email) {
+  position: relative;
+}
+
+.homeBtn {
+  color: var(--ten);
+  cursor: pointer;
+  position: absolute;
+  left: -20px;
+  top: -20px;
+  transition: transform 1s;
+}
+
+.homeBtn span {
+  top: -1px;
+  margin-left: 1px;
+  position: relative;
+}
+
+.homeBtn:hover {
+  color: rgb(199, 199, 199);
+  transform: translateX(-10px);
+}
+
+
+/* #registerBtn {
+  position: absolute;
+  bottom: -70px;
+  left: 50%;
+  transform: translateX(-50%);
+} */
+
+nav {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  top: 0;
+  left:0;
+  width: 100vw;
+  width: 100svw;
+  z-index: 1000;
+}
+
+nav > * {
+  margin: 20px;
+}
+
+nav > .homeLink {
+  text-decoration: none;
+  color:white;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--ten);
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+nav > .homeLink:hover {
+  background-color: rgb(199, 199, 199);
+  color: black;
+}
+
+.userOpt {
+  display: flex;
+  gap: 20px;
+}
+
+.verification-code {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.verification-code > button {
+  width: fit-content;
+}
+/* 
+.verification-code > button:nth-child(2) {
+  font-size: 1.2rem;
+} */
+
+.verification-code > button:nth-child(2) {
+  background-color: transparent;
+  padding: 0;
+  margin-top: .5rem;
+}
+
+.input-boxes {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.code-input {
+  width: 25px;
+  height: 30px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.secret {
+  overflow-x: hidden;
+}
+
+.acct-modal {
+  position: absolute;
+  width: 25vw;
+  right: 0;
+  top: 5rem;
+  opacity: 0;
+  background-color: #e6e6e6;
+  transition: all .2s;
+}
+
+.acct-modal > ul {
+  list-style: none;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: x-large;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin: 0;
+}
+
+.acct-modal > ul > li a {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+}
+
+.acct-modal > ul > li a:hover {
+  color: rgba(0, 0, 0, .5);
+}
+
+.bg-cover {
+  background-color: rgba(0, 0, 0, .5);
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#modal {
+  text-align: right;
+  background-color: #e6e6e6;
+  color: black;
+  padding: 1rem;
+  border-radius: 1.2rem;
+}
+
+.open {
+  opacity: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#modal > form {
+  display: grid;
+  margin: 0;
+  grid-template-columns: 1fr 2fr;
+}
+
+#modal > button {
+  margin-bottom: 1rem;
+  background: transparent;
+  padding: 0;
+}
+
+#modal > form > input {
+  margin: 0;
+  margin-left: auto;
+  width: 80%;
+}
+
+#modal > form > button {
+  grid-column: 2;
+  width: fit-content;
+  justify-self: end;
+  margin-top: 1rem;
+}
+
+.close {
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+#settingsPage {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+nav#sidebar {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 30%;
+  padding-top: 5rem;
+  justify-content: unset;
+  align-items: unset;
+  font-size: 2rem;
+  z-index: 0;
+}
+
+.userSettings {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.userData {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 80%;
+}
+
+#settingsPage > div > form > button {
+  grid-column: 2;
+}
+
+.sc-grid {
+  grid-column: 2;
+}
