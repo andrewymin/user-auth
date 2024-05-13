@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import GeneralSettings from "../components/generalSettings";
 import SecuritySettings from "../components/securitySettings";
-import NewPassword from "../components/PassInput";
 import { useNavigate, useParams } from "react-router-dom";
 import TopNav from "../components/topNav";
 import { useAuth } from "../context/AuthContext";
@@ -10,7 +9,7 @@ import { ToastContainer } from "react-toastify";
 
 function Dashboard(props) {
   // either update this through useParams or use Authcontext state
-  const { userDataFetch } = useAuth();
+  const { authCheck } = useAuth();
   const { showError, showSuccess } = useToast();
   const { cat } = useParams();
   const navigate = useNavigate();
@@ -19,9 +18,9 @@ function Dashboard(props) {
 
   useEffect(() => {
     // 4/29 commented for testing
-    // userDataFetch();
 
-    // TODO: Look into why this renders 4 times if using side-modal
+    authCheck();
+
     if (!cat) return navigate("/");
     setActiveTab(cat);
   }, [navigate]);
@@ -29,11 +28,6 @@ function Dashboard(props) {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     //TODO: add this.toggle('active') class to which ever was clicked
-  };
-
-  const updatePass = () => {
-    // TODO: Add auth function for axios call to update new password after sending verify email link
-    showSuccess("Finish this todo! 📃");
   };
 
   return (

@@ -2,7 +2,9 @@ import React, { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 
 function GeneralSettings(props) {
-  const { state } = useAuth();
+  const { state, userDataFetch } = useAuth();
+
+  userDataFetch();
 
   const titleHeading = {
     position: "absolute",

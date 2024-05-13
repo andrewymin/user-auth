@@ -10,7 +10,8 @@ function Inputs(props) {
       placeholder={props.ph}
       minLength={props.lengthMin}
       required={true}
-      autoComplete="off"
+      autoComplete="on"
+      // autoComplete="off" // turned off auto suggestions for testing
     />
   );
 }

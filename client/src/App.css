@@ -302,10 +302,15 @@ nav > .homeLink:hover {
   position: absolute;
   width: 25vw;
   right: 0;
-  top: 5rem;
+  top: 5rem !important;
+  left: auto !important;
   opacity: 0;
   background-color: #e6e6e6;
   transition: all .2s;
+}
+
+.acct-modal.open {
+  transform: translate(0, 0);
 }
 
 .acct-modal > ul {

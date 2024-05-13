@@ -7,7 +7,7 @@ function Secret(props) {
 
   useEffect(() => {
     // 4/29 commented for testing
-    // authCheck();
+    authCheck();
   }, []);
 
   return (

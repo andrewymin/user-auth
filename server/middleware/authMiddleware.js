@@ -12,10 +12,6 @@ const verifyUserToken = async (req, res, next) => {
   // console.log(token);
   // console.log(access_token);
 
-  // console.log("this should be logged as long as middleware is working");
-  // status 401 = unauthorized access
-  //   if (!token) return res.status(401).json({ msg: "Not authorized. No Cookie" });
-
   if (!token && !access_token && !refresh_token)
     return res.status(401).json("Unauthorized"); // this doesn't allow the refresh token to work!
 

@@ -16,7 +16,7 @@ app.use(cookieParser());
 ///////////// cors connection to frontend
 app.use(
   cors({
-    origin: "http://localhost:5173", // localhost:
+    origin: "http://localhost:5173", // change on prod.
     methods: "GET, POST, PUT, DELETE",
     credentials: true,
   })
