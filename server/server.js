@@ -16,11 +16,19 @@ app.use(cookieParser());
 ///////////// cors connection to frontend
 app.use(
   cors({
-    origin: "http://localhost:5173", // change on prod.
+    origin: "",
     methods: "GET, POST, PUT, DELETE",
     credentials: true,
   })
 );
+// use below when testing on local
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173",
+//     methods: "GET, POST, PUT, DELETE",
+//     credentials: true,
+//   })
+// );
 
 // app.use(bodyParser.urlencoded({ extended: true}));
 app.use(express.json());
@@ -47,15 +55,17 @@ specified in the schema model.
 
 */
 mongoose
-  //   .connect(process.env.MONGO_URI, {
-  .connect("mongodb://127.0.0.1:27017/jwtAuth", {
+  .connect(process.env.MONGO_URI, {
+    // .connect("mongodb://127.0.0.1:27017/jwtAuth", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => {
     // listen for requests
     app.listen(port, () => {
-      console.log(`Connected to db & server is running on port: ${port}.`);
+      // use when in local
+      // console.log(`Connected to db & server is running on port: ${port}.`);
+      res.json(`Connected to db & server is running.`);
     });
   })
   .catch((error) => {
@@ -63,5 +73,7 @@ mongoose
   });
 
 app.get("/", (req, res) => {
-  res.send("Server up and running");
+  // use when in local
+  // res.send("Server up and running");
+  res.json("Sever up and running");
 });
