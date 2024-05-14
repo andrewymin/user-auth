@@ -65,7 +65,7 @@ mongoose
     app.listen(port, () => {
       // use when in local
       // console.log(`Connected to db & server is running on port: ${port}.`);
-      res.json(`Connected to db & server is running.`);
+      res.json(`Connected to db & server is running on port: ${port}`);
     });
   })
   .catch((error) => {
