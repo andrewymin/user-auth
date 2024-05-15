@@ -14,21 +14,22 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 ///////////// cors connection to frontend
-app.use(
-  cors({
-    origin: "",
-    methods: "GET, POST, PUT, DELETE",
-    credentials: true,
-  })
-);
-// use below when testing on local
 // app.use(
 //   cors({
-//     origin: "http://localhost:5173",
+//     origin: "",
 //     methods: "GET, POST, PUT, DELETE",
 //     credentials: true,
 //   })
 // );
+
+// use below when testing on local
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: "GET, POST, PUT, DELETE",
+    credentials: true,
+  })
+);
 
 // app.use(bodyParser.urlencoded({ extended: true}));
 app.use(express.json());
@@ -54,26 +55,46 @@ saved in the database, even if some of them are not
 specified in the schema model.
 
 */
-mongoose
-  .connect(process.env.MONGO_URI, {
-    // .connect("mongodb://127.0.0.1:27017/jwtAuth", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    // listen for requests
-    app.listen(port, () => {
-      // use when in local
-      // console.log(`Connected to db & server is running on port: ${port}.`);
-      res.json(`Connected to db & server is running on port: ${port}`);
+// mongoose
+//   .connect(process.env.MONGO_URI, {
+//     // .connect("mongodb://127.0.0.1:27017/jwtAuth", {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .then(() => {
+//     // listen for requests
+//     app.listen(port, () => {
+//       // use when in local
+//       console.log(`Connected to db & server is running on port: ${port}.`);
+
+//       // res.json(`Connected to db & server is running on port: ${port}`);
+//     });
+//   })
+//   .catch((error) => {
+//     console.log(error.message);
+//   });
+
+const startServer = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
-  })
-  .catch((error) => {
-    console.log(error.message);
-  });
+    console.log("Connected to MongoDB");
+
+    app.listen(port, () => {
+      console.log(`Server listening on port ${port}'`);
+    });
+  } catch (err) {
+    console.error("Error connecting to MongoDB:", err);
+  }
+};
+
+startServer();
 
 app.get("/", (req, res) => {
   // use when in local
-  // res.send("Server up and running");
-  res.json("Sever up and running");
+  res.send("Server up and running");
+
+  // res.json("Sever up and running");
 });
