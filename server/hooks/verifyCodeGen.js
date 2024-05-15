@@ -1,10 +1,6 @@
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 import fs from "fs";
-import { fileURLToPath } from "url";
-import path from "path";
-
-// const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const source = fs.readFileSync(
   "./emailTemplates/email_template_1.html",
