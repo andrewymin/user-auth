@@ -6,15 +6,27 @@ import path from "path";
 
 // const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const source = fs.readFileSync(
-  path.join(process.cwd(), "/emailTemplates/email_template_1.html"),
-  "utf8"
-);
+// const source = fs.readFileSync(
+//   path.join(process.cwd(), "/emailTemplates/email_template_1.html"),
+//   "utf8"
+// );
 
-const source2 = fs.readFileSync(
-  path.join(process.cwd(), "/emailTemplates/email_template_2.html"),
-  "utf8"
-);
+// const source2 = fs.readFileSync(
+//   path.join(process.cwd(), "/emailTemplates/email_template_2.html"),
+//   "utf8"
+// );
+
+const getHtmlFile = (num) => {
+  let filePath = path.join(
+    process.cwd(),
+    `/emailTemplates/email_template_${num}.html`
+  );
+  let file = fs.readFileSync(filePath, "utf8");
+  return file;
+};
+
+let test = path.join(process.cwd(), "/emailTemplates/email_template_2.html");
+console.log(test);
 
 // Function to replace placeholders with dynamic variables
 const fillTemplate = (template, variables) => {
@@ -37,7 +49,10 @@ function generateRandomSixDigitNumber() {
   return randomSixDigitNumber;
 }
 
+////////// Send Verify Email
 function verifyEmail(email, code) {
+  // get verify email template file
+  const source = getHtmlFile(1);
   var transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -65,7 +80,10 @@ function verifyEmail(email, code) {
   });
 }
 
+////////// Send Password Reset Email
 function resetPasswordEmail(email, resetToken) {
+  // get password reset email template file
+  const source = getHtmlFile(2);
   var transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -78,7 +96,7 @@ function resetPasswordEmail(email, resetToken) {
     from: process.env.EMAIL, // user company email if it exists
     to: email,
     subject: "Password Reset Test",
-    html: fillTemplate(source2, {
+    html: fillTemplate(source, {
       token: resetToken,
     }),
   };
