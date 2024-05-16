@@ -9,7 +9,7 @@ const verifyUserToken = async (req, res, next) => {
   const access_token = await req.cookies.access_token;
   const refresh_token = await req.cookies.refresh_token;
 
-  // console.log(token);
+  console.log(token);
   // console.log(access_token);
 
   if (!token && !access_token && !refresh_token)

@@ -133,12 +133,12 @@ export const AuthProvider = ({ children }) => {
       await customAxios.get("auth/protected-route").then((res) => {
         // TODO: check what acctually gets send back to payload to fix
         dispatch({ type: "IS_AUTH", payload: res.data.userData.email });
-        // console.log(res);
+        console.log(res);
       });
     } catch (error) {
       dispatch({ type: "IS_AUTH", payload: false });
       console.log(error.response);
-      navigate("/");
+      // navigate("/");
     }
   };
 
