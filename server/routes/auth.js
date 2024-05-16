@@ -72,7 +72,7 @@ router.get("/oauth/google", async (req, res) => {
   // get user with token
   const googleUser = await getGoogleUser(access_token);
   const user = await User.googleLink(googleUser, id_token);
-
+  //TODO: 5/16 change this to show error that there was no google user
   if (!user) {
     // res.redirect(`http://localhost:5173/account-link/${id_token}/${ac_token}`); // this means there was a user but no google id link
     res.redirect(`http://localhost:5173/account-link/test/${ac_token}`);
@@ -86,9 +86,11 @@ router.get("/oauth/google", async (req, res) => {
   // res.cookie("access_token", ac_token, { httpOnly: true, maxAge: 60000 }); // 1 min for testing, ms time
   // res.cookie("refresh_token", rf_Token, { httpOnly: true, maxAge: 180000 }); // 3 min for testing, ms time
 
-  // redirect back to client
-  res.redirect("http://localhost:5173/secret");
-  // res.redirect("http://localhost:5173");
+  //// redirect back to client
+  // localhost redirect
+  // res.redirect("http://localhost:5173/secret");
+  // vercel redirect
+  res.redirect("https://user-auth-frontend-teal.vercel.app/secret");
 });
 
 // router.get("/google/callback", async (req, res) => {
