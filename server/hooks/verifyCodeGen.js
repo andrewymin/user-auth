@@ -25,8 +25,8 @@ const getHtmlFile = (num) => {
   return file;
 };
 
-let test = path.join(process.cwd(), "/emailTemplates/email_template_2.html");
-console.log(test);
+// let test = path.join(process.cwd(), "/emailTemplates/email_template_2.html");
+// console.log(test);
 
 // Function to replace placeholders with dynamic variables
 const fillTemplate = (template, variables) => {
