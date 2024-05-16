@@ -5,9 +5,9 @@ import { getGoogleUser, getNewAccessToken } from "./googleFunctions.js";
 ///////////// Verify Middleware for protected routes
 
 const verifyUserToken = async (req, res, next) => {
-  const token = req.cookies.token;
-  const access_token = req.cookies.access_token;
-  const refresh_token = req.cookies.refresh_token;
+  const token = await req.cookies.token;
+  const access_token = await req.cookies.access_token;
+  const refresh_token = await req.cookies.refresh_token;
 
   // console.log(token);
   // console.log(access_token);
