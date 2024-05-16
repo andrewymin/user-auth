@@ -16,7 +16,8 @@ app.use(cookieParser());
 
 ///////////// cors connection to frontend
 const corsOptions = {
-  origin: "https://user-auth-frontend-teal.vercel.app", // Explicitly allow your frontend domain
+  origin:
+    "https://user-auth-frontend-iub0vod93-andrewymins-projects.vercel.app", // Explicitly allow your frontend domain
   methods: "GET, POST, PUT, DELETE", // Specify allowed methods as needed
   credentials: true, // If your frontend needs to send cookies or credentials with the request
   allowedHeaders: "Content-Type,Authorization", // Specify allowed headers
