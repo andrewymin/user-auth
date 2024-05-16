@@ -13,7 +13,11 @@ const createToken = (_id) => {
 const createCookie = (_id, name, res) => {
   // if (token) console.log("made token?"); // this is for testing
   const token = createToken(_id);
-  return res.cookie(name, token, { httpOnly: true, maxAge: MAX_AGE });
+  return res.cookie(name, token, {
+    httpOnly: true,
+    sameSite: "Strict",
+    maxAge: MAX_AGE,
+  });
 };
 
 export { createCookie };

@@ -13,6 +13,8 @@ import cookieParser from "cookie-parser";
 const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+// Trust the first proxy, required for secure cookies on Heroku/Vercel
+app.set("trust proxy", 1);
 
 ///////////// cors connection to frontend
 const corsOptions = {
