@@ -15,7 +15,8 @@ const createCookie = (_id, name, res) => {
   const token = createToken(_id);
   return res.cookie(name, token, {
     httpOnly: true,
-    sameSite: "Strict",
+    sameSite: "none",
+    secure: process.env.NODE_ENV === "production",
     maxAge: MAX_AGE,
   });
 };
