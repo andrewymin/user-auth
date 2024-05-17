@@ -138,7 +138,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       dispatch({ type: "IS_AUTH", payload: false });
       console.log(error.response);
-      // navigate("/");
+      navigate("/");
     }
   };
 
