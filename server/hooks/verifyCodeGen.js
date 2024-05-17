@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import path from "path";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-console.log(__dirname);
+console.log("what folder am I in for vercel: ", __dirname);
 // const source = fs.readFileSync(
 //   path.join(process.cwd(), "/emailTemplates/email_template_1.html"),
 //   "utf8"
