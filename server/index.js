@@ -44,43 +44,12 @@ app.use("/verification", verifyRoute);
 
 ///////////// connection to mongoose
 let port = process.env.port || 5000;
-// mongoose.set("strictQuery", true);
-// mongoose
-//   .connect(process.env.MONGO_URI, {
-//     // .connect("mongodb://127.0.0.1:27017/jwtAuth", {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   })
-//   .then(() => {
-//     // listen for requests
-//     app.listen(port, () => {
-//       // use when in local
-//       console.log(`Connected to db & server is running on port: ${port}.`);
-
-//       // res.json(`Connected to db & server is running on port: ${port}`);
-//     });
-//   })
-//   .catch((error) => {
-//     console.log(error.message);
-//   });
 
 const startServer = async () => {
   try {
     mongoose.set("strictQuery", true);
-    /*
-When the strict option is set to true, 
-Mongoose will ensure that only the fields that are specified 
-in your schema will be saved in the database, and all other 
-fields will not be saved (if some other fields are sent).
-
-Right now, this option is enabled by default, 
-but it will be changed in Mongoose v7 to false by 
-default. That means that all the fields will be 
-saved in the database, even if some of them are not 
-specified in the schema model.
-
-*/
     await mongoose.connect(process.env.MONGO_URI, {
+      // .connect("mongodb://127.0.0.1:27017/jwtAuth", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

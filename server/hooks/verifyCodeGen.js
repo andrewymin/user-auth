@@ -5,16 +5,6 @@ import { fileURLToPath } from "url";
 import path from "path";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-console.log("what folder am I in for vercel: ", __dirname);
-// const source = fs.readFileSync(
-//   path.join(process.cwd(), "/emailTemplates/email_template_1.html"),
-//   "utf8"
-// );
-
-// const source2 = fs.readFileSync(
-//   path.join(process.cwd(), "/emailTemplates/email_template_2.html"),
-//   "utf8"
-// );
 
 // const templatePath = path.join(
 //   process.cwd(),
@@ -31,9 +21,6 @@ const getHtmlFile = (num) => {
   let file = fs.readFileSync(filePath, "utf8");
   return file;
 };
-
-// let test = path.join(process.cwd(), "/emailTemplates/email_template_2.html");
-// console.log(test);
 
 // Function to replace placeholders with dynamic variables
 const fillTemplate = (template, variables) => {
@@ -88,7 +75,7 @@ function verifyEmail(email, code) {
 }
 
 ////////// Send Password Reset Email
-function resetPasswordEmail(email, resetToken) {
+async function resetPasswordEmail(email, resetToken) {
   // get password reset email template file
   const source = getHtmlFile(2);
   var transporter = nodemailer.createTransport({
@@ -108,10 +95,16 @@ function resetPasswordEmail(email, resetToken) {
     }),
   };
 
-  transporter.sendMail(mailOptions, function (error) {
-    if (error) {
-      console.log(error);
-    }
+  await new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        console.log(info);
+        resolve(info);
+      }
+    });
   });
 }
 
