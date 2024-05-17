@@ -84,8 +84,7 @@ specified in the schema model.
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log("Connected to MongoDB");
-    console.log(process.cwd());
+    console.log("Connected to MongoDB ", process.cwd());
     app.listen(port, () => {
       console.log(`Server listening on port ${port}`);
     });
