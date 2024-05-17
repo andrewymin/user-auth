@@ -16,10 +16,18 @@ import path from "path";
 //   "utf8"
 // );
 
+// const templatePath = path.join(
+//   process.cwd(),
+//   "emailTemplates",
+//   "email_template_2.html"
+// );
+// console.log(templatePath);
+
 const getHtmlFile = (num) => {
   let filePath = path.join(
     process.cwd(),
-    `/emailTemplates/email_template_${num}.html`
+    `emailTemplates`,
+    `email_template_${num}.html`
   );
   let file = fs.readFileSync(filePath, "utf8");
   return file;

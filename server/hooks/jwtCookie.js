@@ -15,8 +15,8 @@ const createCookie = (_id, name, res) => {
   const token = createToken(_id);
   return res.cookie(name, token, {
     httpOnly: true,
-    sameSite: "none",
-    secure: process.env.NODE_ENV === "production",
+    sameSite: "none", // makes it possible to do cross-site calls for creation and req.cookies
+    secure: process.env.NODE_ENV === "production", // Need this for sameSite: "none" to work
     maxAge: MAX_AGE,
   });
 };
