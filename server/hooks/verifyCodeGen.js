@@ -25,9 +25,8 @@ console.log("what folder am I in for vercel: ", __dirname);
 
 const getHtmlFile = (num) => {
   let filePath = path.join(
-    process.cwd(),
-    `emailTemplates`,
-    `email_template_${num}.html`
+    __dirname,
+    `../emailTemplates/email_template_${num}.html`
   );
   let file = fs.readFileSync(filePath, "utf8");
   return file;
