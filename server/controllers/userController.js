@@ -101,7 +101,7 @@ const userData = async (req, res) => {
         const user = await User.findById(decodedToken._id);
         let data = {
           email: user.email,
-          googleLink: user.password ? "Linked" : "Not Linked",
+          googleLink: user.googleId ? "Linked" : "Not Linked",
         };
 
         if (user) return res.status(200).json({ userData: data });
@@ -127,10 +127,13 @@ const resetPasswordLink = async (req, res) => {
       token: token,
     });
 
-    resetPasswordEmail(user.email, token);
-    return res
-      .status(200)
-      .json({ successMsg: "Successfully sent link to email!" });
+    let emailRes = await resetPasswordEmail(user.email, token);
+    console.log("if log, this is emailRes: ", emailRes.messageId);
+    if (emailRes.messageId)
+      return res
+        .status(200)
+        .json({ successMsg: "Successfully sent link to email!" });
+    return res.status(400).json({ errorMsg: "Error sending email" });
   }
 
   if (!token) {

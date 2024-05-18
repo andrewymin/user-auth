@@ -46,7 +46,7 @@ function Login() {
           userID: state.user,
         })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           showSuccess(res.data.successMsg);
           setOpenModal(false);
         });

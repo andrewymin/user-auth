@@ -9,7 +9,7 @@ import { ToastContainer } from "react-toastify";
 
 function Dashboard(props) {
   // either update this through useParams or use Authcontext state
-  const { authCheck } = useAuth();
+  const { state, authCheck, userDataFetch } = useAuth();
   const { showError, showSuccess } = useToast();
   const { cat } = useParams();
   const navigate = useNavigate();
@@ -18,8 +18,8 @@ function Dashboard(props) {
 
   useEffect(() => {
     // 4/29 commented for testing
-
     authCheck();
+    userDataFetch();
 
     if (!cat) return navigate("/");
     setActiveTab(cat);
@@ -41,7 +41,12 @@ function Dashboard(props) {
 
       {/* Render the appropriate settings component */}
       <div className="userSettings">
-        {activeTab === "general" && <GeneralSettings />}
+        {activeTab === "general" && (
+          <GeneralSettings
+            email={state.user.email}
+            googleLinked={state.user.googleLink}
+          />
+        )}
         {activeTab === "security" && <SecuritySettings />}
       </div>
       <ToastContainer />

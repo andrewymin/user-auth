@@ -95,17 +95,7 @@ async function resetPasswordEmail(email, resetToken) {
     }),
   };
 
-  await new Promise((resolve, reject) => {
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err) {
-        console.log(err);
-        reject(err);
-      } else {
-        console.log(info);
-        resolve(info);
-      }
-    });
-  });
+  return transporter.sendMail(mailOptions);
 }
 
 export { generateRandomSixDigitNumber, verifyEmail, resetPasswordEmail };

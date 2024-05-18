@@ -119,7 +119,7 @@ export const AuthProvider = ({ children }) => {
   const userDataFetch = async () => {
     try {
       await customAxios.get("api/user/data").then((res) => {
-        // console.log(res.data);
+        // console.log(res.data.userData);
         dispatch({ type: "USER", payload: res.data.userData });
       });
     } catch (error) {
@@ -133,7 +133,7 @@ export const AuthProvider = ({ children }) => {
       await customAxios.get("auth/protected-route").then((res) => {
         // TODO: check what acctually gets send back to payload to fix
         dispatch({ type: "IS_AUTH", payload: res.data.userData.email });
-        console.log(res);
+        // console.log(res);
       });
     } catch (error) {
       dispatch({ type: "IS_AUTH", payload: false });

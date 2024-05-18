@@ -128,7 +128,7 @@ userSchema.statics.signup = async function (email, password) {
 
     if (exists.googleId) {
       const verifyCode = generateRandomSixDigitNumber();
-      console.log(verifyCode);
+      console.log("this is code if user google linked: ", verifyCode);
       const hash = await bycrpt.hash(password, 10);
 
       const newTempUser = await TempUser.create({
@@ -147,7 +147,7 @@ userSchema.statics.signup = async function (email, password) {
   // create check where if tempuser still exists then...
   if (tempExists) {
     const newCode = generateRandomSixDigitNumber();
-    console.log(newCode);
+    console.log("This is new code if temp already exists: ", newCode);
     const updatedTempUser = await TempUser.findOneAndUpdate(
       { email: tempExists.email },
       {
@@ -159,7 +159,7 @@ userSchema.statics.signup = async function (email, password) {
   }
 
   const verifyCode = generateRandomSixDigitNumber();
-  console.log(verifyCode);
+  console.log("This is code for new user: ", verifyCode);
 
   // const salt = await bycrpt.genSalt(saltRounds);
   const hash = await bycrpt.hash(password, 10);
