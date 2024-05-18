@@ -9,6 +9,7 @@ import {
 const EXPIRE_AGE = 180; // in sec
 
 const resetEmail = new mongoose.Schema({
+  // for when user requests password reset link, later deleted on completion or expried time reached
   email: String,
   token: String,
   expireAt: {
@@ -19,6 +20,7 @@ const resetEmail = new mongoose.Schema({
 });
 
 const verificationRequest = new mongoose.Schema({
+  // for sign up verification code input to see if email is real
   vCode: String,
   expireAt: {
     type: Date,
@@ -28,6 +30,7 @@ const verificationRequest = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
+  // user db modal and its data blueprint
   createdAt: { type: Date, required: true, default: Date.now },
   email: {
     type: String,
@@ -67,7 +70,7 @@ const tempUserSchema = new mongoose.Schema({
   verificationCode: verificationRequest,
 });
 
-const TempUser = mongoose.model("tempUser", tempUserSchema);
+const TempUser = mongoose.model("tempUser", tempUserSchema); // creating model of temp user here to be used in functions below for error corrections
 
 ///////////// static signup method/function being created
 // to be able to use the this keyword MUST use a regular function instead of an arrow funnction
@@ -120,16 +123,17 @@ userSchema.statics.signup = async function (email, password) {
   //   throw Error("Password not strong enough");
   // }
 
-  const exists = await this.findOne({ email });
-  const tempExists = await TempUser.findOne({ email: email });
+  const exists = await this.findOne({ email }); // checking to see if user already exists
+  const tempExists = await TempUser.findOne({ email: email }); // checking if user didn't complete verify code input and tried again within the expire time
 
   if (exists) {
     if (exists.verified) throw Error("Email already in use");
 
     if (exists.googleId) {
+      // checking if exsiting user has logged in with google
       const verifyCode = generateRandomSixDigitNumber();
       console.log("this is code if user google linked: ", verifyCode);
-      const hash = await bycrpt.hash(password, 10);
+      const hash = await bycrpt.hash(password, 10); // hashing password for security with 10 salt rounds
 
       const newTempUser = await TempUser.create({
         googleUserId: exists._id,
@@ -139,12 +143,12 @@ userSchema.statics.signup = async function (email, password) {
         verificationCode: { vCode: verifyCode }, // update this to NULL for it not to expire
       });
 
-      return newTempUser;
+      return newTempUser; // user already logged in previously through google thus email will already be saved in db thus sending temp user until verification is complete
       // throw Error("User already exists please use social login.");
     }
   }
 
-  // create check where if tempuser still exists then...
+  // created check where if tempuser still exists from not completing verify create new code and override old temp user that didn't log previously with google
   if (tempExists) {
     const newCode = generateRandomSixDigitNumber();
     console.log("This is new code if temp already exists: ", newCode);
@@ -158,11 +162,11 @@ userSchema.statics.signup = async function (email, password) {
     return updatedTempUser;
   }
 
-  const verifyCode = generateRandomSixDigitNumber();
+  const verifyCode = generateRandomSixDigitNumber(); // generating 6 digit crypto number for security
   console.log("This is code for new user: ", verifyCode);
 
   // const salt = await bycrpt.genSalt(saltRounds);
-  const hash = await bycrpt.hash(password, 10);
+  const hash = await bycrpt.hash(password, 10); // hashing password for security
 
   const newUser = await this.create({
     email: email,
@@ -173,10 +177,12 @@ userSchema.statics.signup = async function (email, password) {
 
   ///////////////////  Uncomment when ready to email
   // Here send a email for verification with crypto code
-  // verifyEmail(email, verifyCode);
+  // let emailRes = await verifyEmail(email, verifyCode);
+  // if (emailRes.messageId)
+  //   return newUser
+  // throw Error("Verify email couldn't be sent.");
 
-  // return verifyCode;
-  return newUser;
+  return newUser; // return created user with all its data from db
 };
 
 userSchema.statics.googleSignup = async function (email, google_id) {

@@ -127,9 +127,10 @@ const resetPasswordLink = async (req, res) => {
       token: token,
     });
 
-    let emailRes = await resetPasswordEmail(user.email, token);
+    let emailRes = await resetPasswordEmail(user.email, token); // getting response from nodemailer if email was successful or not
     console.log("if log, this is emailRes: ", emailRes.messageId);
     if (emailRes.messageId)
+      // checking if email is acctually sent before sending response of 200, if not could get success but no email
       return res
         .status(200)
         .json({ successMsg: "Successfully sent link to email!" });

@@ -4,6 +4,9 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
 
+// uncomment for testing on localhost
+// const linkURL = 'http://localhost:5000';
+const linkURL = "https://user-auth-server-three.vercel.app";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // const templatePath = path.join(
@@ -65,13 +68,7 @@ function verifyEmail(email, code) {
     }),
   };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log(`Email sent: ${info.response}\nCode is: ${code}.`);
-    }
-  });
+  return transporter.sendMail(mailOptions);
 }
 
 ////////// Send Password Reset Email
@@ -92,6 +89,7 @@ async function resetPasswordEmail(email, resetToken) {
     subject: "Password Reset Test",
     html: fillTemplate(source, {
       token: resetToken,
+      serverURL: linkURL,
     }),
   };
 

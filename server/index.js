@@ -62,7 +62,7 @@ const startServer = async () => {
   }
 };
 
-startServer();
+startServer(); // placed mongoose connection in function for async/await for deployment server (vercel)
 
 app.get("/", (req, res) => {
   // use when in local

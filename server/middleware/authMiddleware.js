@@ -5,16 +5,18 @@ import { getGoogleUser, getNewAccessToken } from "./googleFunctions.js";
 ///////////// Verify Middleware for protected routes
 
 const verifyUserToken = async (req, res, next) => {
-  const token = await req.cookies.token;
-  const access_token = await req.cookies.access_token;
-  const refresh_token = await req.cookies.refresh_token;
+  const token = await req.cookies.token; // using cookie-parser package to get cookie easier by name
+  const access_token = await req.cookies.access_token; // check if access_token exists and save if it does
+  const refresh_token = await req.cookies.refresh_token; // check if refresh_token exists and save if it does
 
-  console.log("this is the cookie token: ", token);
+  console.log("this is the cookie token: ", token); // testing token
   // console.log(access_token);
 
+  // if neither of these exists them user hasn't created an account thus not verified
   if (!token && !access_token && !refresh_token)
     return res.status(401).json("Unauthorized"); // this doesn't allow the refresh token to work!
 
+  // logged in through google and refresh_token exists to relogin without access_token
   if (refresh_token && !access_token) {
     // const googleUser = await getGoogleUser({ access_token });
     // console.log({ email: googleUser.email });
@@ -41,19 +43,21 @@ const verifyUserToken = async (req, res, next) => {
   //   req.token = token;
   //   next();
 
+  // token from previous login exists thus relog user without making them submit login info again
   if (token) {
     jwt.verify(
+      // verifing token with secret decode from jwt library
       token,
       process.env.ACCESS_TOKEN_SECRET,
       async (err, decodedToken) => {
         //   req.user_id = decodedToken._id;
         if (err) return res.status(401);
         const user = await User.findById(decodedToken._id);
-
+        // setting req.user to email of user for rest of function of connected route
         if (user) req.user = user.email;
         else return res.status(401);
 
-        next();
+        next(); // continue to rest of function of connected route
       }
     );
   }
