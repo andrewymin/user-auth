@@ -74,9 +74,9 @@ const signupUser = async (req, res) => {
 const logoutUser = (req, res, next) => {
   // console.log("am I getting to this route");
   try {
-    res.clearCookie("token");
-    res.clearCookie("access_token");
-    res.clearCookie("refresh_token");
+    res.clearCookie("token", { expires: new Date(1) });
+    res.clearCookie("access_token", { expires: new Date(1) });
+    res.clearCookie("refresh_token", { expires: new Date(1) });
     next(); // using middleware to ensure that the cookies clear before sending 200 status since it's been doing that in vercel
   } catch (error) {
     console.log(error);
