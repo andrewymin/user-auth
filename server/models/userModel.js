@@ -281,10 +281,8 @@ userSchema.statics.googleLink = async function (googleUser, id_token) {
     // user has already completed regular sign-in that is verified thus update existing user with googleid: token to show linking of acct's
     user.googleId = id_token;
     // The save() method returns a promise. If save() succeeds, return the newly updated user
-    await user.save().then((updatedUser) => {
-      console.log("this is updated user: ", updatedUser);
-      return updatedUser;
-    });
+    const updatedUser = await user.save();
+    return updatedUser;
   }
 };
 
