@@ -69,8 +69,9 @@ router.get("/oauth/google", async (req, res) => {
     code,
   });
 
-  // get user with token
+  // get google user data from google
   const googleUser = await getGoogleUser(access_token);
+  // Check if google user already created a regular user
   const user = await User.googleLink(googleUser, id_token);
   //TODO: 5/16 change this to show error that there was no google user
   if (!user) {

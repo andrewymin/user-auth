@@ -49,8 +49,8 @@ const userSchema = new mongoose.Schema({
   verificationCode: verificationRequest,
 });
 
-// Used for temp storing if google user exists but they're trying to
-//  use same email for regular sign-in
+// Used for temp storing if GOOGLE user exists but they're trying to
+//  use same email for regular sign-in, thus temp while user hasn't completed verification code to link accounts
 const tempUserSchema = new mongoose.Schema({
   googleUserId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -124,7 +124,7 @@ userSchema.statics.signup = async function (email, password) {
   // }
 
   const exists = await this.findOne({ email }); // checking to see if user already exists
-  const tempExists = await TempUser.findOne({ email: email }); // checking if user didn't complete verify code input and tried again within the expire time
+  const tempExists = await TempUser.findOne({ email: email }); // checking if user didn't complete verify code input and trying again before tempUser expires
 
   if (exists) {
     if (exists.verified) throw Error("Email already in use");
@@ -148,7 +148,7 @@ userSchema.statics.signup = async function (email, password) {
     }
   }
 
-  // created check where if tempuser still exists from not completing verify create new code and override old temp user that didn't log previously with google
+  // Check if tempuser exists from not completing verify before it has expired from before
   if (tempExists) {
     const newCode = generateRandomSixDigitNumber();
     console.log("This is new code if temp already exists: ", newCode);
@@ -253,17 +253,19 @@ userSchema.statics.googleLink = async function (googleUser, id_token) {
     throw Error("Need params to look for user.");
   }
 
-  const user = await this.findOne({ email: googleUser.email });
+  const user = await this.findOne({ email: googleUser.email }); // checking db if user exists from regular login
 
   if (!user) {
+    // there wasn't user already in db thus create new user with google data
     const NewUser = await User.googleSignup(googleUser.email, id_token);
     console.log("new user created with google login");
     return NewUser;
   }
 
-  if (user && user.googleId) return user;
+  if (user && user.googleId) return user; // user has both google and regular user connected in db thus return user
 
   if (user && !user.googleId) {
+    // user exists but not connected with google user
     // user has not completed regular sign-in a.k.a didn't do code verification
     if (!user.verified) {
       const NewUser = await User.googleSignup({
@@ -273,7 +275,7 @@ userSchema.statics.googleLink = async function (googleUser, id_token) {
       console.log("User needs to do verification for google and acct to link");
       return NewUser;
     }
-    // user has already completed regular sign-in thus email is same user
+    // user has already completed regular sign-in at this point thus update existing user with googleid: token
     return user;
   }
 };
