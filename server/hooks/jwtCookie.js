@@ -28,7 +28,6 @@ const deleteCookie = (name, res) => {
     // comment out sameSite and secure for localhost
     sameSite: "none", // makes it possible to do cross-site calls for creation and req.cookies
     secure: process.env.NODE_ENV === "production", // Need this for sameSite: "none" to work
-    maxAge: 0,
     path: "/",
   });
 };

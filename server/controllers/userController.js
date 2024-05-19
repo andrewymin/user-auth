@@ -80,6 +80,11 @@ const logoutUser = (req, res, next) => {
     deleteCookie("token", res);
     deleteCookie("access_token", res);
     deleteCookie("refresh_token", res);
+
+    res.set("Cache-Control", "no-store");
+    res.set("Pragma", "no-cache");
+    res.set("Expires", "0");
+
     next(); // using middleware to ensure that the cookies clear before sending 200 status since it's been doing that in vercel
   } catch (error) {
     console.log(error);
