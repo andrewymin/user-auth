@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import bycrpt from "bcrypt";
 import { ResetEmail, User } from "../models/userModel.js";
-import { createCookie } from "../hooks/jwtCookie.js";
+import { createCookie, deleteCookie } from "../hooks/jwtCookie.js";
 import { resetPasswordEmail } from "../hooks/verifyCodeGen.js";
 import crypto from "crypto";
 
@@ -74,9 +74,12 @@ const signupUser = async (req, res) => {
 const logoutUser = (req, res, next) => {
   // console.log("am I getting to this route");
   try {
-    res.clearCookie("token", { expires: new Date(0) });
-    res.clearCookie("access_token", { expires: new Date(0) });
-    res.clearCookie("refresh_token", { expires: new Date(0) });
+    // res.clearCookie("token", { expires: new Date(0) });
+    // res.clearCookie("access_token", { expires: new Date(0) });
+    // res.clearCookie("refresh_token", { expires: new Date(0) });
+    deleteCookie("token");
+    deleteCookie("access_token");
+    deleteCookie("refresh_token");
     next(); // using middleware to ensure that the cookies clear before sending 200 status since it's been doing that in vercel
   } catch (error) {
     console.log(error);
