@@ -20,7 +20,9 @@ router.post("/login", loginUser);
 router.post("/signup", signupUser);
 
 ///////////// logout route
-router.get("/logout", logoutUser);
+router.get("/logout", logoutUser, (req, res) => {
+  res.status(200).json({ isUser: false }); // sending success status after clearing cookies
+});
 
 ///////////// logout route
 router.get("/cookie", checkCookie);

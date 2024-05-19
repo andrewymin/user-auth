@@ -71,15 +71,13 @@ const signupUser = async (req, res) => {
 // };
 
 ///////////// logout user
-const logoutUser = async (req, res) => {
+const logoutUser = (req, res, next) => {
+  // console.log("am I getting to this route");
   try {
-    // console.log("am I getting to this route");
     res.clearCookie("token");
     res.clearCookie("access_token");
     res.clearCookie("refresh_token");
-
-    res.status(200).json({ isUser: false });
-    // res.status(400);
+    next(); // using middleware to ensure that the cookies clear before sending 200 status since it's been doing that in vercel
   } catch (error) {
     console.log(error);
     res.status(400).json({ errorMsg: error.message });
