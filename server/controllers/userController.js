@@ -77,6 +77,7 @@ const logoutUser = async (req, res) => {
     res.clearCookie("token");
     res.clearCookie("access_token");
     res.clearCookie("refresh_token");
+
     res.status(200).json({ isUser: false });
     // res.status(400);
   } catch (error) {
@@ -128,7 +129,7 @@ const resetPasswordLink = async (req, res) => {
     });
 
     let emailRes = await resetPasswordEmail(user.email, token); // getting response from nodemailer if email was successful or not
-    console.log("if log, this is emailRes: ", emailRes.messageId);
+    // console.log("if log, this is emailRes: ", emailRes.messageId);
     if (emailRes.messageId)
       // checking if email is acctually sent before sending response of 200, if not could get success but no email
       return res

@@ -139,8 +139,8 @@ userSchema.statics.signup = async function (email, password) {
         googleUserId: exists._id,
         email: email,
         password: hash,
-        verified: false, // this needs to change to true if it gets verified
-        verificationCode: { vCode: verifyCode }, // update this to NULL for it not to expire
+        verified: false, // this is placed as a check so no one can bypass sign-up to get to user data
+        verificationCode: { vCode: verifyCode }, // setting this automatically sets this document to be expired from schema if not turned to null
       });
 
       return newTempUser; // user already logged in previously through google thus email will already be saved in db thus sending temp user until verification is complete
@@ -171,8 +171,8 @@ userSchema.statics.signup = async function (email, password) {
   const newUser = await this.create({
     email: email,
     password: hash,
-    verified: false, // this needs to change to true if it gets verified
-    verificationCode: { vCode: verifyCode }, // update this to NULL for it not to expire
+    verified: false, // this is placed as a check so no one can bypass sign-up to get to user data
+    verificationCode: { vCode: verifyCode }, // setting this automatically sets this document to be expired from schema if not turned to null
   });
 
   ///////////////////  Uncomment when ready to email
@@ -268,15 +268,22 @@ userSchema.statics.googleLink = async function (googleUser, id_token) {
     // user exists but not connected with google user
     // user has not completed regular sign-in a.k.a didn't do code verification
     if (!user.verified) {
+      // this user didn't finish verification code thus instead of updating it since it will eventually expire just create new user with google data
       const NewUser = await User.googleSignup({
         email: googleUser.email,
         googleId: id_token,
       });
-      console.log("User needs to do verification for google and acct to link");
+      console.log(
+        "User needs to finish or activate verification code for google and acct to link"
+      );
       return NewUser;
     }
-    // user has already completed regular sign-in at this point thus update existing user with googleid: token
-    return user;
+    // user has already completed regular sign-in that is verified thus update existing user with googleid: token to show linking of acct's
+    user.googleId = id_token;
+    // The save() method returns a promise. If save() succeeds, return the newly updated user
+    await user.save().then((updatedUser) => {
+      return updatedUser;
+    });
   }
 };
 
