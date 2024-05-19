@@ -252,7 +252,7 @@ userSchema.statics.googleLink = async function (googleUser, id_token) {
   if (!googleUser) {
     throw Error("Need params to look for user.");
   }
-
+  console.log("test to see google email passed through: ", googleUser.email);
   const user = await this.findOne({ email: googleUser.email }); // checking db if user exists from regular login
 
   if (!user) {
@@ -282,6 +282,7 @@ userSchema.statics.googleLink = async function (googleUser, id_token) {
     user.googleId = id_token;
     // The save() method returns a promise. If save() succeeds, return the newly updated user
     await user.save().then((updatedUser) => {
+      console.log("this is updated user: ", updatedUser);
       return updatedUser;
     });
   }
