@@ -137,7 +137,9 @@ export const AuthProvider = ({ children }) => {
       });
     } catch (error) {
       dispatch({ type: "IS_AUTH", payload: false });
-      console.log(error.response);
+      // console.log(error.response);
+      // may need to change this to only naviagte to home if not already
+      //  on home page to stop double load even with useEffect
       navigate("/");
     }
   };

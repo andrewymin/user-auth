@@ -120,10 +120,11 @@ const userData = async (req, res) => {
 
 ///////////// Reset Password Link
 const resetPasswordLink = async (req, res) => {
-  const username = await req.body.userID;
+  const username = await req.body.userID; // check if link was accessed from login page
   // console.log(username);
-  const token = req.cookies.token;
+  const token = await req.cookies.token; // check if link was accessed from account security page
   if (username) {
+    // sent from login page with email
     const user = await User.findOne({ email: username });
     if (!user) return res.status(404).json({ errorMsg: "User not found" });
 
@@ -147,6 +148,7 @@ const resetPasswordLink = async (req, res) => {
   if (!token) {
     console.log("no token");
   } else {
+    // sent from security page where already logged in
     jwt.verify(
       token,
       process.env.ACCESS_TOKEN_SECRET,
@@ -166,10 +168,13 @@ const resetPasswordLink = async (req, res) => {
           token: token,
         });
 
-        resetPasswordEmail(user.email, token);
-        return res
-          .status(200)
-          .json({ successMsg: "Successfully sent link to email!" });
+        let emailRes = await resetPasswordEmail(user.email, token);
+        if (emailRes.messageId)
+          // checking if email is acctually sent before sending response of 200, if not could get success but no email
+          return res
+            .status(200)
+            .json({ successMsg: "Successfully sent link to email!" });
+        return res.status(400).json({ errorMsg: "Error sending email" });
       }
     );
   }
