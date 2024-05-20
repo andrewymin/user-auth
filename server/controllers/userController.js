@@ -188,7 +188,10 @@ const resetPasswordPage = async (req, res) => {
   try {
     const user = await ResetEmail.findOne({ token: token });
     if (!user) return res.status(404).json({ errorMsg: "User not found" });
-    res.redirect(`http://localhost:5173/password-reset/${token}`);
+    // res.redirect(`http://localhost:5173/password-reset/${token}`);
+    res.redirect(
+      `https://user-auth-frontend-teal.vercel.app/password-reset/${token}`
+    );
   } catch (error) {
     console.log(error);
   }
