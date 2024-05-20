@@ -29,6 +29,10 @@ h1 {
   height: 100svh;
   width: 100vw;
   width: 100svw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .mt1 {
@@ -40,7 +44,9 @@ h1 {
 }
 
 .loginSection {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
   align-items: center;
   justify-content: space-around;
 }
@@ -50,20 +56,19 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-}
 
-.authTypes > div {
-  /* background-color: red; */
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  margin: 0 10px;
-  width: 140px;
-  cursor: pointer;
-}
+  & > a, & > div {
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    margin: 0 10px;
+    width: 140px;
+    cursor: pointer;
 
-.authTypes > div:hover {
-  opacity: .8;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
 }
 
 .gg {
@@ -75,7 +80,7 @@ h1 {
 }
 
 .gh {
-  background-color: black;
+  background-color: rgb(43, 49, 55);;
   color: white;
 }
 
@@ -391,6 +396,7 @@ nav > .homeLink:hover {
   transform: translateX(100%);
   opacity: 0;
   visibility: hidden;
+  display: none;
 }
 
 #settingsPage {
