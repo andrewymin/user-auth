@@ -1,5 +1,3 @@
-// import dotenv from "dotenv";
-// dotenv.config();
 import "dotenv/config.js";
 import express from "express";
 import mongoose from "mongoose"; // for DB
@@ -67,6 +65,4 @@ startServer(); // placed mongoose connection in function for async/await for dep
 app.get("/", (req, res) => {
   // use when in local
   res.send("Server up and running");
-
-  // res.json("Sever up and running");
 });

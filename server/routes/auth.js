@@ -64,7 +64,8 @@ router.get("/oauth/google", async (req, res) => {
   // get the code from qs on the F.E. side
   const code = req.query.code;
 
-  // get the id and access token from code
+  // Use callback to get googleoauthtokens used to
+  //   get the id and access token from code
   const { id_token, access_token, refresh_token } = await getGoogleOAuthTokens({
     code,
   });

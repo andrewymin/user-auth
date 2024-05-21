@@ -6,7 +6,7 @@ export default function Home() {
   const { state, logout, authCheck } = useAuth();
   useEffect(() => {
     authCheck();
-  }, []);
+  }, [state.isUser]);
 
   // const isUser = false;
 

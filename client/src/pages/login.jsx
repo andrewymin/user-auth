@@ -71,10 +71,6 @@ function Login() {
     psw?.setAttribute("type", type);
   };
 
-  const fb = () => {
-    console.log("facebook auth");
-  };
-
   const gh = () => {
     console.log("github auth");
   };
@@ -109,10 +105,6 @@ function Login() {
           <a className="gg" href={getGoogleUrl()}>
             Google
           </a>
-          {/* <div id="signInDiv"></div> */}
-          <div className="fb" onClick={fb}>
-            Facebook
-          </div>
           <div className="gh" onClick={gh}>
             Github
           </div>

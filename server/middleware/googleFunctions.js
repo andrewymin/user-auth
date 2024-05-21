@@ -3,7 +3,7 @@ import qs from "qs";
 import jwt from "jsonwebtoken";
 import { createCookie } from "../hooks/jwtCookie.js";
 // import { createToken } from "../controllers/userController.js";
-
+// this is the callback for google oauth
 const getGoogleOAuthTokens = async ({ code }) => {
   const url = "https://oauth2.googleapis.com/token";
   const values = {
@@ -58,12 +58,6 @@ const getNewAccessToken = async (refresh_token, res) => {
     const response = await axios.post(url, qs.stringify(values));
     // console.log(res.data);
     const newAccessToken = response.data.access_token;
-
-    // const ac_tocken = createToken(newAccessToken);
-    // res.cookie("access_token", ac_tocken, {
-    //   httpOnly: true,
-    //   maxAge: 60000,
-    // }); // 1 min for testing, ms time
 
     createCookie(newAccessToken, "access_token", res);
 

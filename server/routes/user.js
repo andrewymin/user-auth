@@ -42,9 +42,6 @@ router.post("/reset-password", resetPassword);
 // ///////////// google route
 // router.get('/google', logoutUser)
 
-// ///////////// facebook route
-// router.get('/facebook', logoutUser)
-
 // ///////////// github route
 // router.get('/github', logoutUser)
 

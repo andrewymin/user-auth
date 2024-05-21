@@ -181,13 +181,15 @@ const resetPasswordLink = async (req, res) => {
 };
 
 ///////////// Reset Password Page from email link
+// this is reached from EMAIL sent from reset-pass-link NOT going to be on frontend
+// Used to check if reset link as expired or not using resetemail modal
 const resetPasswordPage = async (req, res) => {
-  // TODO: get token from url
   const token = req.query.resetToken;
   // console.log(token);
   try {
     const user = await ResetEmail.findOne({ token: token });
     if (!user) return res.status(404).json({ errorMsg: "User not found" });
+    // redirect to frontend password change component if link is still good
     // res.redirect(`http://localhost:5173/password-reset/${token}`);
     res.redirect(
       `https://user-auth-frontend-teal.vercel.app/password-reset/${token}`
