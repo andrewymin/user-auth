@@ -43,6 +43,9 @@ const userSchema = new mongoose.Schema({
   googleId: {
     type: String,
   },
+  githubId: {
+    type: String,
+  },
   verified: {
     type: Boolean,
   },
@@ -53,6 +56,10 @@ const userSchema = new mongoose.Schema({
 //  use same email for regular sign-in, thus temp while user hasn't completed verification code to link accounts
 const tempUserSchema = new mongoose.Schema({
   googleUserId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  githubUserId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
@@ -245,19 +252,19 @@ userSchema.statics.login = async function (email, password) {
 //   exists already from regular sign-in
 // To be able to use the this keyword MUST use a
 //   regular function instead of an arrow funnction
-userSchema.statics.googleLink = async function (googleUser, id_token) {
+userSchema.statics.accountLink = async function (acctUser, id_token) {
   // Add mongodb update function here to update the existing user if exists
   //  WITHOUT google_id add the user_id to this.findOne({email}) for linking
   //  BUT make pop-up first to ask user!
-  if (!googleUser) {
+  if (!acctUser) {
     throw Error("Need params to look for user.");
   }
-  console.log("test to see google email passed through: ", googleUser.email);
-  const user = await this.findOne({ email: googleUser.email }); // checking db if user exists from regular login
+  // console.log("test to see google email passed through: ", acctUser.email);
+  const user = await this.findOne({ email: acctUser.email }); // checking db if user exists from regular login
 
   if (!user) {
     // there wasn't user already in db thus create new user with google data
-    const NewUser = await User.googleSignup(googleUser.email, id_token);
+    const NewUser = await User.googleSignup(acctUser.email, id_token);
     console.log("new user created with google login");
     return NewUser;
   }
@@ -270,7 +277,7 @@ userSchema.statics.googleLink = async function (googleUser, id_token) {
     if (!user.verified) {
       // this user didn't finish verification code thus instead of updating it since it will eventually expire just create new user with google data
       const NewUser = await User.googleSignup({
-        email: googleUser.email,
+        email: acctUser.email,
         googleId: id_token,
       });
       console.log(

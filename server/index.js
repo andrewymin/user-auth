@@ -15,22 +15,22 @@ app.use(cookieParser());
 app.set("trust proxy", 1);
 
 ///////////// cors connection to frontend
-const corsOptions = {
-  origin: "https://user-auth-frontend-teal.vercel.app", // Explicitly allow your frontend domain
-  methods: "GET, POST, PUT, DELETE, OPTIONS", // Specify allowed methods as needed
-  credentials: true, // If your frontend needs to send cookies or credentials with the request
-  allowedHeaders: ["X-Requested-With", "Content-Type", "Authorization"], // Specify allowed headers
-};
-app.use(cors(corsOptions));
+// const corsOptions = {
+//   origin: "https://user-auth-frontend-teal.vercel.app", // Explicitly allow your frontend domain
+//   methods: "GET, POST, PUT, DELETE, OPTIONS", // Specify allowed methods as needed
+//   credentials: true, // If your frontend needs to send cookies or credentials with the request
+//   allowedHeaders: ["X-Requested-With", "Content-Type", "Authorization"], // Specify allowed headers
+// };
+// app.use(cors(corsOptions));
 
-// // use below when testing on local
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173",
-//     methods: "GET, POST, PUT, DELETE",
-//     credentials: true,
-//   })
-// );
+// use below when testing on local
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: "GET, POST, PUT, DELETE",
+    credentials: true,
+  })
+);
 
 // app.use(bodyParser.urlencoded({ extended: true}));
 app.use(express.json());

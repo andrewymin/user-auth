@@ -5,7 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import customAxios from "../components/axiosInstance";
-import getGoogleUrl from "./getGoogleUrl";
+import getGoogleUrl from "../oauth_Urls/getGoogleUrl";
+import { getGithubUrl } from "../oauth_Urls/getGithubUrl";
 import useToast from "../components/notifications";
 
 function Login() {
@@ -105,9 +106,9 @@ function Login() {
           <a className="gg" href={getGoogleUrl()}>
             Google
           </a>
-          <div className="gh" onClick={gh}>
+          <a className="gh" href={getGithubUrl()}>
             Github
-          </div>
+          </a>
         </div>
         <div className="inputContainer">
           <form className="formInputs" onSubmit={handleSubmit}>

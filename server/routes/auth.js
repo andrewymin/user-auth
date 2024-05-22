@@ -10,6 +10,10 @@ import {
 // import { createToken } from "../controllers/userController.js";
 import { createCookie } from "../hooks/jwtCookie.js";
 import { User, ResetEmail } from "../models/userModel.js";
+import {
+  getGithubOAuthTokens,
+  getGithubUser,
+} from "../middleware/githubFunctions.js";
 
 const router = express.Router();
 // const CLIENT_URL = "http://localhost:5173";
@@ -58,7 +62,7 @@ const router = express.Router();
 // });
 */
 
-///////////// Oauth Manual way for aws later
+///////////// Oauth google
 
 router.get("/oauth/google", async (req, res) => {
   // get the code from qs on the F.E. side
@@ -73,7 +77,7 @@ router.get("/oauth/google", async (req, res) => {
   // get google user data from google
   const googleUser = await getGoogleUser(access_token);
   // Check if google user already created a regular user
-  const user = await User.googleLink(googleUser, id_token);
+  const user = await User.accountLink(googleUser, id_token);
   //TODO: 5/16 change this to show error that there was no google user
   if (!user) {
     // res.redirect(`http://localhost:5173/account-link/${id_token}/${ac_token}`); // this means there was a user but no google id link
@@ -93,6 +97,45 @@ router.get("/oauth/google", async (req, res) => {
   // res.redirect("http://localhost:5173/secret");
   // vercel redirect
   res.redirect("https://user-auth-frontend-teal.vercel.app/secret");
+});
+
+///////////// Oauth github
+
+router.get("/oauth/github", async (req, res) => {
+  // get the code from qs on the F.E. side
+  const code = req.query.code;
+
+  // Use callback to get github oauth tokens used to
+  //   get access token from code since thats the only thing to get back
+  const { access_token } = await getGithubOAuthTokens({
+    code,
+  });
+
+  // get github user data from different github api calls
+  const githubUser = await getGithubUser(access_token);
+  // console.log(githubUser);
+
+  // Check if github user already created a regular user or with other accounts
+  // const user = await User.accountLink(githubUser.email, githubUser.data.id.toString());
+
+  //TODO: 5/16 change this to show error that there was no google user
+  // if (!user) {
+  //   // res.redirect(`http://localhost:5173/account-link/${id_token}/${ac_token}`); // this means there was a user but no google id link
+  //   res.redirect(`http://localhost:5173/account-link/test/${ac_token}`);
+  //   return;
+  // }
+
+  // set cookies
+  // createCookie(user._id, "token", res);
+  // createCookie(access_token, "access_token", res);
+  // createCookie(refresh_token, "refresh_token", res);
+
+  //// redirect back to client
+  // localhost redirect
+  // res.redirect("http://localhost:5173");
+  // res.redirect("http://localhost:5173/secret");
+  // vercel redirect
+  // res.redirect("https://user-auth-frontend-teal.vercel.app/secret");
 });
 
 // router.get("/google/callback", async (req, res) => {
