@@ -77,7 +77,7 @@ router.get("/oauth/google", async (req, res) => {
   // get google user data from google
   const googleUser = await getGoogleUser(access_token);
   // Check if google user already created a regular user
-  const user = await User.accountLink(googleUser, id_token);
+  const user = await User.accountLink(googleUser, id_token, "google");
   //TODO: 5/16 change this to show error that there was no google user
   if (!user) {
     // res.redirect(`http://localhost:5173/account-link/${id_token}/${ac_token}`); // this means there was a user but no google id link
@@ -116,7 +116,11 @@ router.get("/oauth/github", async (req, res) => {
   // console.log(githubUser);
 
   // Check if github user already created a regular user or with other accounts
-  // const user = await User.accountLink(githubUser.email, githubUser.data.id.toString());
+  const user = await User.accountLink(
+    githubUser,
+    githubUser.data.id.toString(),
+    "github"
+  );
 
   //TODO: 5/16 change this to show error that there was no google user
   // if (!user) {

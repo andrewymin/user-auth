@@ -208,6 +208,22 @@ userSchema.statics.googleSignup = async function (email, google_id) {
   return newUser;
 };
 
+userSchema.statics.githubSignup = async function (email, github_id) {
+  if (!email || !google_id) {
+    throw Error("All fields must be filled");
+  }
+  if (!validator.isEmail(email)) {
+    throw Error("Email is not valid");
+  }
+
+  const newUser = await this.create({
+    email,
+    githubId: github_id,
+  });
+
+  return newUser;
+};
+
 ///////////// static login method/function being created
 // to be able to use the this keyword MUST use a regular function instead of an arrow funnction
 userSchema.statics.login = async function (email, password) {
@@ -252,7 +268,7 @@ userSchema.statics.login = async function (email, password) {
 //   exists already from regular sign-in
 // To be able to use the this keyword MUST use a
 //   regular function instead of an arrow funnction
-userSchema.statics.accountLink = async function (acctUser, id_token) {
+userSchema.statics.accountLink = async function (acctUser, id_token, company) {
   // Add mongodb update function here to update the existing user if exists
   //  WITHOUT google_id add the user_id to this.findOne({email}) for linking
   //  BUT make pop-up first to ask user!
@@ -262,34 +278,68 @@ userSchema.statics.accountLink = async function (acctUser, id_token) {
   // console.log("test to see google email passed through: ", acctUser.email);
   const user = await this.findOne({ email: acctUser.email }); // checking db if user exists from regular login
 
+  // if (user && user.googleId && user.githubId) return user; // user has a google, github and regular user connected in db thus return user
+
   if (!user) {
+    const NewUser =
+      company == "google"
+        ? await User.googleSignup(acctUser.email, id_token)
+        : await User.githubSignup(acctUser.email, id_token);
     // there wasn't user already in db thus create new user with google data
-    const NewUser = await User.googleSignup(acctUser.email, id_token);
-    console.log("new user created with google login");
+    // TODO: 5/21 figure out how to know if its google or github
+    // const NewUser = await User.githubSignup(acctUser.email, id_token);
+    console.log("new user created with oauth login");
     return NewUser;
   }
 
-  if (user && user.googleId) return user; // user has both google and regular user connected in db thus return user
+  if (company == "google") {
+    if (user && user.googleId) return user; // user has both google and regular user connected in db thus return user
 
-  if (user && !user.googleId) {
-    // user exists but not connected with google user
-    // user has not completed regular sign-in a.k.a didn't do code verification
-    if (!user.verified) {
-      // this user didn't finish verification code thus instead of updating it since it will eventually expire just create new user with google data
-      const NewUser = await User.googleSignup({
-        email: acctUser.email,
-        googleId: id_token,
-      });
-      console.log(
-        "User needs to finish or activate verification code for google and acct to link"
-      );
-      return NewUser;
+    if (user && !user.googleId) {
+      // user exists but not connected with google user
+      // user has not completed regular sign-in a.k.a didn't do code verification
+      if (!user.verified) {
+        // this user didn't finish verification code thus instead of updating it since it will eventually expire just create new user with google data
+        const NewUser = await User.googleSignup({
+          email: acctUser.email,
+          googleId: id_token,
+        });
+        console.log(
+          "User needs to finish or activate verification code for google and acct to link"
+        );
+        return NewUser;
+      }
+      // user has already completed regular sign-in that is verified thus update existing user with googleid: token to show linking of acct's
+      user.googleId = id_token;
+      // The save() method returns a promise. If save() succeeds, return the newly updated user
+      const updatedUser = await user.save();
+      return updatedUser;
     }
-    // user has already completed regular sign-in that is verified thus update existing user with googleid: token to show linking of acct's
-    user.googleId = id_token;
-    // The save() method returns a promise. If save() succeeds, return the newly updated user
-    const updatedUser = await user.save();
-    return updatedUser;
+  }
+
+  if (company == "github") {
+    if (user && user.githubId) return user; // user has both github and regular user connected in db thus return user
+
+    if (user && !user.githubId) {
+      // user exists but not connected with github user
+      // user has not completed regular sign-in a.k.a didn't do code verification
+      if (!user.verified) {
+        // this user didn't finish verification code thus instead of updating it since it will eventually expire just create new user with github data
+        const NewUser = await User.githubSignup({
+          email: acctUser.email,
+          githubId: id_token,
+        });
+        console.log(
+          "User needs to finish or activate verification code for github and acct to link"
+        );
+        return NewUser;
+      }
+      // user has already completed regular sign-in that is verified thus update existing user with githubid: token to show linking of acct's
+      user.githubId = id_token;
+      // The save() method returns a promise. If save() succeeds, return the newly updated user
+      const updatedUser = await user.save();
+      return updatedUser;
+    }
   }
 };
 
