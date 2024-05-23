@@ -111,7 +111,7 @@ router.get("/oauth/github", async (req, res) => {
 
   // get github user data from different github api calls
   const githubUser = await getGithubUser(access_token);
-  // console.log(githubUser);
+  console.log(githubUser);
 
   // Check if github user already created a regular user or with other accounts
   const user = await User.accountLink(

@@ -12,7 +12,7 @@ const getGithubOAuthTokens = async ({ code }) => {
     // redirect for localhost
     // redirect_uri: process.env.GITHUB_OAUTH_REDIRECT_URI,
     // redirect for localvercel
-    redirect_uri: process.env.GOOGLE_OAUTH_REDIRECT_URI_VERCEL,
+    redirect_uri: process.env.GITHUB_OAUTH_REDIRECT_URI_VERCEL,
   };
   try {
     const res = await axios.post(url, qs.stringify(values), {
@@ -50,7 +50,7 @@ const getGithubUser = async (access_token) => {
     const userData = { data: user.data, email: userEmail };
     return userData;
   } catch (error) {
-    console.error(error.response.data, "Error fetching google user");
+    console.error(error.response.data, "Error fetching github user");
   }
 };
 
