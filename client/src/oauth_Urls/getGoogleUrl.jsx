@@ -3,8 +3,8 @@ function getGoogleUrl(props) {
 
   const options = {
     // redirect_uri will send this to node server at endpoint /oauth/google
-    redirect_uri: import.meta.env.VITE_GOOGLE_OAUTH_REDIRECT_URL,
-    // redirect_uri: import.meta.env.VITE_GOOGLE_OAUTH_REDIRECT_URL_VERCEL,
+    // redirect_uri: import.meta.env.VITE_GOOGLE_OAUTH_REDIRECT_URL,
+    redirect_uri: import.meta.env.VITE_GOOGLE_OAUTH_REDIRECT_URL_VERCEL,
     client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
     response_type: "code",
     access_type: "offline", // Need this to get refresh token

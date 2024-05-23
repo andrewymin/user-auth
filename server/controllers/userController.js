@@ -74,13 +74,10 @@ const signupUser = async (req, res) => {
 const logoutUser = (req, res, next) => {
   // console.log("am I getting to this route");
   try {
-    // res.clearCookie("token", { expires: new Date(0) });
-    // res.clearCookie("access_token", { expires: new Date(0) });
-    // res.clearCookie("refresh_token", { expires: new Date(0) });
     deleteCookie("token", res);
     deleteCookie("access_token", res);
     deleteCookie("refresh_token", res);
-
+    // needed these three params for cookies to actual be deleted
     res.set("Cache-Control", "no-store");
     res.set("Pragma", "no-cache");
     res.set("Expires", "0");

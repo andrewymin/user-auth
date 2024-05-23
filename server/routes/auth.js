@@ -82,12 +82,6 @@ router.get("/oauth/google", async (req, res) => {
   // Check if google user already created a regular user
   const user = await User.accountLink(googleUser, id_token, "google");
   // console.log(user._id);
-  //TODO: 5/16 change this to show error that there was no google user
-  // if (!user) {
-  //   // res.redirect(`http://localhost:5173/account-link/${id_token}/${ac_token}`); // this means there was a user but no google id link
-  //   res.redirect(`http://localhost:5173/account-link/test/${ac_token}`);
-  //   return;
-  // }
 
   // set cookies
   createCookie(user._id, "token", res);
@@ -98,9 +92,9 @@ router.get("/oauth/google", async (req, res) => {
 
   //// redirect back to client
   // localhost redirect
-  res.redirect("http://localhost:5173/secret");
+  // res.redirect("http://localhost:5173/secret");
   // vercel redirect
-  // res.redirect("https://user-auth-frontend-teal.vercel.app/secret");
+  res.redirect("https://user-auth-frontend-teal.vercel.app/secret");
 });
 
 ///////////// Oauth github
@@ -126,31 +120,17 @@ router.get("/oauth/github", async (req, res) => {
     "github"
   );
 
-  //TODO: 5/16 change this to show error that there was no google user
-  // if (!user) {
-  //   // res.redirect(`http://localhost:5173/account-link/${id_token}/${ac_token}`); // this means there was a user but no google id link
-  //   res.redirect(`http://localhost:5173/account-link/test/${ac_token}`);
-  //   return;
-  // }
-
   // set cookies
   createCookie(user._id, "token", res);
-  // createCookie(access_token, "access_token", res); // this is causing Error fetching google user in protected route somehow
-  // createCookie(refresh_token, "refresh_token", res);
 
   //// redirect back to client
   // localhost redirect
-  res.redirect("http://localhost:5173/secret");
+  // res.redirect("http://localhost:5173/secret");
   // vercel redirect
-  // res.redirect("https://user-auth-frontend-teal.vercel.app/secret");
+  res.redirect("https://user-auth-frontend-teal.vercel.app/secret");
 });
 
 ///////////// Protected Routes
-
-// router.get("/link-accounts", verifyGoogleLink, async (req, res) => {
-//   // console.log(req.user); // req is from middleware req
-//   res.status(200).json({ userData: { email: req.user } });
-// });
 
 router.get("/protected-route", verifyUserToken, (req, res) => {
   // console.log(req.user); // req is from middleware req

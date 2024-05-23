@@ -16,8 +16,8 @@ const createCookie = (_id, name, res) => {
   return res.cookie(name, token, {
     httpOnly: true,
     // comment out sameSite and secure for localhost
-    // sameSite: "none", // makes it possible to do cross-site calls for creation and req.cookies
-    // secure: process.env.NODE_ENV === "production", // Need this for sameSite: "none" to work
+    sameSite: "none", // makes it possible to do cross-site calls for creation and req.cookies
+    secure: process.env.NODE_ENV === "production", // Need this for sameSite: "none" to work
     maxAge: MAX_AGE,
   });
 };
@@ -26,8 +26,8 @@ const deleteCookie = (name, res) => {
   return res.clearCookie(name, {
     httpOnly: true,
     // comment out sameSite and secure for localhost
-    // sameSite: "none", // makes it possible to do cross-site calls for creation and req.cookies
-    // secure: process.env.NODE_ENV === "production", // Need this for sameSite: "none" to work
+    sameSite: "none", // makes it possible to do cross-site calls for creation and req.cookies
+    secure: process.env.NODE_ENV === "production", // Need this for sameSite: "none" to work
     path: "/",
   });
 };

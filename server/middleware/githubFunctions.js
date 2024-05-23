@@ -10,9 +10,9 @@ const getGithubOAuthTokens = async ({ code }) => {
     client_id: process.env.GITHUB_CLIENT_ID,
     client_secret: process.env.GITHUB_CLIENT_SECRET,
     // redirect for localhost
-    redirect_uri: process.env.GITHUB_OAUTH_REDIRECT_URI,
+    // redirect_uri: process.env.GITHUB_OAUTH_REDIRECT_URI,
     // redirect for localvercel
-    // redirect_uri: process.env.GOOGLE_OAUTH_REDIRECT_URI_VERCEL,
+    redirect_uri: process.env.GOOGLE_OAUTH_REDIRECT_URI_VERCEL,
   };
   try {
     const res = await axios.post(url, qs.stringify(values), {
@@ -53,27 +53,5 @@ const getGithubUser = async (access_token) => {
     console.error(error.response.data, "Error fetching google user");
   }
 };
-
-// const getNewAccessToken = async (refresh_token, res) => {
-//   const url = "https://oauth2.googleapis.com/token";
-//   const values = {
-//     refresh_token: refresh_token,
-//     client_id: process.env.GOOGLE_CLIENT_ID,
-//     client_secret: process.env.GOOGLE_CLIENT_SECRET,
-//     grant_type: "refresh_token",
-//   };
-//   try {
-//     const response = await axios.post(url, qs.stringify(values));
-//     // console.log(res.data);
-//     const newAccessToken = response.data.access_token;
-
-//     createCookie(newAccessToken, "access_token", res);
-
-//     // console.log(newAccessToken);
-//     return newAccessToken;
-//   } catch (error) {
-//     console.error(error, "Failed to make new access token from refresh token.");
-//   }
-// };
 
 export { getGithubOAuthTokens, getGithubUser };

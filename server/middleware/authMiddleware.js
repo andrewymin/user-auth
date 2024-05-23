@@ -18,9 +18,6 @@ const verifyUserToken = async (req, res, next) => {
 
   // logged in through google and refresh_token exists to relogin without access_token
   if (refresh_token && !access_token) {
-    // const googleUser = await getGoogleUser({ access_token });
-    // console.log({ email: googleUser.email });
-    // console.log("am I getting to this?");
     jwt.verify(
       refresh_token,
       process.env.ACCESS_TOKEN_SECRET,
@@ -34,14 +31,7 @@ const verifyUserToken = async (req, res, next) => {
         next();
       }
     );
-    // console.log(refresh_token, "this should print/log");
-    // req.user = "testing";
-    // next();
   }
-
-  // console.log("This shouldn't print if there's no cooike");
-  //   req.token = token;
-  //   next();
 
   // token from previous login exists thus relog user without making them submit login info again
   if (token) {

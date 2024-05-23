@@ -263,10 +263,6 @@ userSchema.statics.login = async function (email, password) {
   // check if email is verified but no password.
   //   meaning it's already been verified through google but no password
   if (user.verified && !user.password) {
-    // TODO: Later once "create password" page/component is made, send
-    //   different error. On F.E. redirect them to verifypage with new code
-    //   sent to email and once done redirect them again to "create password"
-    //   page and update exisiting user
     throw Error(
       "Email alread exists. Please use social sign-in to \
       login and create password for this login method."
