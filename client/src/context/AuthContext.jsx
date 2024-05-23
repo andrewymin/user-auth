@@ -29,14 +29,6 @@ const reducer = (state, action) => {
     case "PWD": {
       return { ...state, pwd: action.payload };
     }
-    // instead of a state variable for every PROTECTED route, i.e.
-    //   dashboard, make axios call back to the server to see if the
-    //   cookie is still active or need to redirect to login page
-    //   using useEffect; could make a function here as a verfication
-    //   method just like the middleware on server side?
-    // case "IS_AUTH": {
-    //   return { ...state, isUser: false };
-    // }
     case "IS_AUTH": {
       return { ...state, isUser: action.payload };
     }
@@ -110,11 +102,6 @@ export const AuthProvider = ({ children }) => {
       // throw error;
     }
   };
-
-  // const logout = () => {
-  //   console.log("did the localStorage clear?");
-  //   localStorage.clear();
-  // };
 
   const userDataFetch = async () => {
     try {

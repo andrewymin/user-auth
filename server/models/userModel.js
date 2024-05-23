@@ -183,7 +183,6 @@ userSchema.statics.signup = async function (email, password) {
       });
 
       return newTempUser; // user already logged in previously through google thus email will already be saved in db thus sending temp user until verification is complete
-      // throw Error("User already exists please use social login.");
     }
   }
 

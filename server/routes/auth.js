@@ -18,8 +18,10 @@ import {
 //////////// DONT FORGET TO CHANGE PRODUCTION SETTINGS IN COOKIE CREATION AND DELETION FUNCIONS
 
 const router = express.Router();
-// const CLIENT_URL = "http://localhost:5173";
-// const REDIRECT_URL = "http://localhost:5173/google/callback";
+const REDIRECT_URI =
+  process.env.NODE_ENV === "production"
+    ? "https://user-auth-frontend-teal.vercel.app/secret"
+    : "http://localhost:5173/secret";
 
 /*
 // /////////// Passport Google Auth Routes
@@ -94,7 +96,8 @@ router.get("/oauth/google", async (req, res) => {
   // localhost redirect
   // res.redirect("http://localhost:5173/secret");
   // vercel redirect
-  res.redirect("https://user-auth-frontend-teal.vercel.app/secret");
+  // res.redirect("https://user-auth-frontend-teal.vercel.app/secret");
+  res.redirect(REDIRECT_URI);
 });
 
 ///////////// Oauth github
@@ -127,7 +130,8 @@ router.get("/oauth/github", async (req, res) => {
   // localhost redirect
   // res.redirect("http://localhost:5173/secret");
   // vercel redirect
-  res.redirect("https://user-auth-frontend-teal.vercel.app/secret");
+  // res.redirect("https://user-auth-frontend-teal.vercel.app/secret");
+  res.redirect(REDIRECT_URI);
 });
 
 ///////////// Protected Routes

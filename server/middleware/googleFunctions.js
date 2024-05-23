@@ -1,8 +1,13 @@
 import axios from "axios";
 import qs from "qs";
-import jwt from "jsonwebtoken";
 import { createCookie } from "../hooks/jwtCookie.js";
 // import { createToken } from "../controllers/userController.js";
+
+const REDIRECT_URI =
+  process.env.NODE_ENV === "production"
+    ? process.env.GOOGLE_OAUTH_REDIRECT_URI_VERCEL
+    : process.env.GOOGLE_OAUTH_REDIRECT_URI;
+
 // this is the callback for google oauth
 const getGoogleOAuthTokens = async ({ code }) => {
   const url = "https://oauth2.googleapis.com/token";
@@ -13,7 +18,8 @@ const getGoogleOAuthTokens = async ({ code }) => {
     // redirect for vercel
     // redirect_uri: process.env.GOOGLE_OAUTH_REDIRECT_URI_VERCEL,
     // redirect for localhost
-    redirect_uri: process.env.GOOGLE_OAUTH_REDIRECT_URI,
+    // redirect_uri: process.env.GOOGLE_OAUTH_REDIRECT_URI,
+    redirect_uri: REDIRECT_URI,
     grant_type: "authorization_code",
   };
   try {

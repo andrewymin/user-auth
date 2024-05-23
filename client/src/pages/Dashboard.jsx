@@ -27,7 +27,6 @@ function Dashboard(props) {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    //TODO: add this.toggle('active') class to which ever was clicked
   };
 
   return (

@@ -1,6 +1,10 @@
 import axios from "axios";
 import qs from "qs";
-import { createCookie } from "../hooks/jwtCookie.js";
+
+const REDIRECT_URI =
+  process.env.NODE_ENV === "production"
+    ? process.env.GITHUB_OAUTH_REDIRECT_URI_VERCEL
+    : process.env.GITHUB_OAUTH_REDIRECT_URI;
 
 // this is the callback for github oauth
 const getGithubOAuthTokens = async ({ code }) => {
@@ -12,7 +16,8 @@ const getGithubOAuthTokens = async ({ code }) => {
     // redirect for localhost
     // redirect_uri: process.env.GITHUB_OAUTH_REDIRECT_URI,
     // redirect for localvercel
-    redirect_uri: process.env.GITHUB_OAUTH_REDIRECT_URI_VERCEL,
+    // redirect_uri: process.env.GITHUB_OAUTH_REDIRECT_URI_VERCEL,
+    redirect_uri: REDIRECT_URI,
   };
   try {
     const res = await axios.post(url, qs.stringify(values), {

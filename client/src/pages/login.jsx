@@ -56,11 +56,6 @@ function Login() {
     }
   };
 
-  // const handleSubmit = (e) => {
-  //   console.log(state.user, state.pwd);
-  //   e.preventDefault();
-  // };
-
   const showPSW = () => {
     const eye = document.querySelector(".fa-eye");
     const eyeClose = document.querySelector(".fa-eye-slash");
@@ -100,9 +95,6 @@ function Login() {
 
       <div className="loginSection">
         <div className="authTypes">
-          {/* <div className="gg" onClick={getGoogleUrl}>
-            Google
-          </div> */}
           <a className="gg" href={getGoogleUrl()}>
             Google
           </a>

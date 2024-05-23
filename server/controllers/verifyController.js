@@ -95,7 +95,6 @@ const verifyCode = async (req, res) => {
             });
             createCookie(user._id, "token", res);
             deleteCookie("verifyToken", res);
-            // res.clearCookie("verifyToken");
             // after updating google user info, delete tempuser
             tempUser.deleteOne();
             return res.status(200).json({
@@ -109,7 +108,6 @@ const verifyCode = async (req, res) => {
             });
             createCookie(user._id, "token", res);
             deleteCookie("verifyToken", res);
-            // res.clearCookie("verifyToken");
             // after updating google user info, delete tempuser
             tempUser.deleteOne();
             return res.status(200).json({
@@ -125,7 +123,6 @@ const verifyCode = async (req, res) => {
             .json(
               "Incorrect code. Either request for another code or try again."
             );
-          //   res.status(400).json({ errorMsg: "Incorrect Code, this is test" });
         }
         // here vcode has to equal usercode, thus use 'set' to update
         else {

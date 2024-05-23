@@ -115,8 +115,6 @@ const VerificationCode = ({ length = 6 }) => {
             />
           ))}
         </div>
-        {/* <button>Done</button> */}
-        {/* do same thing as onComplete once clicked or delete this */}
         <button onClick={requestCode}>Resend code</button>
       </form>
       <ToastContainer />
