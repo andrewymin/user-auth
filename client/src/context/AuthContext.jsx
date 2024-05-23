@@ -118,7 +118,8 @@ export const AuthProvider = ({ children }) => {
     // console.log(state.user, state.pwd);
     try {
       await customAxios.get("auth/protected-route").then((res) => {
-        // TODO: check what acctually gets send back to payload to fix
+        // TODO: check what actually gets send back to payload to fix
+        //  this should just be false or true
         dispatch({ type: "IS_AUTH", payload: res.data.userData.email });
         // console.log(res);
       });
