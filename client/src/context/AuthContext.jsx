@@ -155,7 +155,7 @@ export const AuthProvider = ({ children }) => {
       });
     } catch (error) {
       dispatch({ type: "ACCESS_V_PAGE", payload: false });
-      console.log(error.response);
+      console.log(error);
       navigate("/");
     }
   };

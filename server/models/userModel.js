@@ -133,6 +133,20 @@ userSchema.statics.signup = async function (email, password) {
   const exists = await this.findOne({ email }); // checking to see if user already exists
   const tempExists = await TempUser.findOne({ email: email }); // checking if user didn't complete verify code input and trying again before tempUser expires
 
+  // Check if tempuser exists from not completing verify before it has expired from before
+  if (tempExists) {
+    const newCode = generateRandomSixDigitNumber();
+    console.log("This is new code if temp already exists: ", newCode);
+    const updatedTempUser = await TempUser.findOneAndUpdate(
+      { email: tempExists.email },
+      {
+        verificationCode: { vCode: newCode, expireAt: EXPIRE_AGE },
+      },
+      { new: true }
+    );
+    return updatedTempUser;
+  }
+
   if (exists) {
     if (exists.verified) throw Error("Email already in use");
 
@@ -153,20 +167,24 @@ userSchema.statics.signup = async function (email, password) {
       return newTempUser; // user already logged in previously through google thus email will already be saved in db thus sending temp user until verification is complete
       // throw Error("User already exists please use social login.");
     }
-  }
 
-  // Check if tempuser exists from not completing verify before it has expired from before
-  if (tempExists) {
-    const newCode = generateRandomSixDigitNumber();
-    console.log("This is new code if temp already exists: ", newCode);
-    const updatedTempUser = await TempUser.findOneAndUpdate(
-      { email: tempExists.email },
-      {
-        verificationCode: { vCode: newCode, expireAt: EXPIRE_AGE },
-      },
-      { new: true }
-    );
-    return updatedTempUser;
+    if (exists.githubId) {
+      // checking if exsiting user has logged in with google
+      const verifyCode = generateRandomSixDigitNumber();
+      console.log("this is code if user github linked: ", verifyCode);
+      const hash = await bycrpt.hash(password, 10); // hashing password for security with 10 salt rounds
+      // create tempUser while waiting for verification code to complete
+      const newTempUser = await TempUser.create({
+        githubUserId: exists._id,
+        email: email,
+        password: hash,
+        verified: false, // this is placed as a check so no one can bypass sign-up to get to user data
+        verificationCode: { vCode: verifyCode }, // setting this automatically sets this document to be expired from schema if not turned to null
+      });
+
+      return newTempUser; // user already logged in previously through google thus email will already be saved in db thus sending temp user until verification is complete
+      // throw Error("User already exists please use social login.");
+    }
   }
 
   const verifyCode = generateRandomSixDigitNumber(); // generating 6 digit crypto number for security
@@ -209,7 +227,7 @@ userSchema.statics.googleSignup = async function (email, google_id) {
 };
 
 userSchema.statics.githubSignup = async function (email, github_id) {
-  if (!email || !google_id) {
+  if (!email || !github_id) {
     throw Error("All fields must be filled");
   }
   if (!validator.isEmail(email)) {

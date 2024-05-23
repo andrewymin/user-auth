@@ -46,8 +46,8 @@ let port = process.env.port || 5000;
 const startServer = async () => {
   try {
     mongoose.set("strictQuery", true);
-    await mongoose.connect(process.env.MONGO_URI, {
-      // .connect("mongodb://127.0.0.1:27017/jwtAuth", {
+    // await mongoose.connect(process.env.MONGO_URI, {
+    await mongoose.connect("mongodb://127.0.0.1:27017/jwtAuth", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

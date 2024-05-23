@@ -15,6 +15,8 @@ import {
   getGithubUser,
 } from "../middleware/githubFunctions.js";
 
+//////////// DONT FORGET TO CHANGE PRODUCTION SETTINGS IN COOKIE CREATION AND DELETION FUNCIONS
+
 const router = express.Router();
 // const CLIENT_URL = "http://localhost:5173";
 // const REDIRECT_URL = "http://localhost:5173/google/callback";
@@ -76,14 +78,16 @@ router.get("/oauth/google", async (req, res) => {
 
   // get google user data from google
   const googleUser = await getGoogleUser(access_token);
+  // console.log("this is google user: ", googleUser);
   // Check if google user already created a regular user
   const user = await User.accountLink(googleUser, id_token, "google");
+  // console.log(user._id);
   //TODO: 5/16 change this to show error that there was no google user
-  if (!user) {
-    // res.redirect(`http://localhost:5173/account-link/${id_token}/${ac_token}`); // this means there was a user but no google id link
-    res.redirect(`http://localhost:5173/account-link/test/${ac_token}`);
-    return;
-  }
+  // if (!user) {
+  //   // res.redirect(`http://localhost:5173/account-link/${id_token}/${ac_token}`); // this means there was a user but no google id link
+  //   res.redirect(`http://localhost:5173/account-link/test/${ac_token}`);
+  //   return;
+  // }
 
   // set cookies
   createCookie(user._id, "token", res);
@@ -94,9 +98,9 @@ router.get("/oauth/google", async (req, res) => {
 
   //// redirect back to client
   // localhost redirect
-  // res.redirect("http://localhost:5173/secret");
+  res.redirect("http://localhost:5173/secret");
   // vercel redirect
-  res.redirect("https://user-auth-frontend-teal.vercel.app/secret");
+  // res.redirect("https://user-auth-frontend-teal.vercel.app/secret");
 });
 
 ///////////// Oauth github
@@ -130,39 +134,16 @@ router.get("/oauth/github", async (req, res) => {
   // }
 
   // set cookies
-  // createCookie(user._id, "token", res);
-  // createCookie(access_token, "access_token", res);
+  createCookie(user._id, "token", res);
+  // createCookie(access_token, "access_token", res); // this is causing Error fetching google user in protected route somehow
   // createCookie(refresh_token, "refresh_token", res);
 
   //// redirect back to client
   // localhost redirect
-  // res.redirect("http://localhost:5173");
-  // res.redirect("http://localhost:5173/secret");
+  res.redirect("http://localhost:5173/secret");
   // vercel redirect
   // res.redirect("https://user-auth-frontend-teal.vercel.app/secret");
 });
-
-// router.get("/google/callback", async (req, res) => {
-//   const { code } = req.query;
-
-//   try {
-//     const { data } = await axios.post("https://oauth2.googleapis.com/token", {
-//       code,
-//       client_id: GOOGLE_CLIENT_ID,
-//       client_secret: GOOGLE_CLIENT_SECRET,
-//       redirect_uri: REDIRECT_URL,
-//       grant_type: "authorization_code",
-//     });
-
-//     // Process the token (e.g., store it, generate JWT, etc.)
-//     const accessToken = data.access_token;
-//     // Handle the access token as needed
-//     res.cookie("token", token, { httpOnly: true, maxAge: 60000 });
-//     res.status(200).send("Successfully authenticated with Google");
-//   } catch (error) {
-//     res.status(500).send("Failed to authenticate with Google");
-//   }
-// });
 
 ///////////// Protected Routes
 

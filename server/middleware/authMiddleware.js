@@ -6,10 +6,10 @@ import { getGoogleUser, getNewAccessToken } from "./googleFunctions.js";
 
 const verifyUserToken = async (req, res, next) => {
   const token = await req.cookies.token; // using cookie-parser package to get cookie easier by name
-  const access_token = await req.cookies.access_token; // check if access_token exists and save if it does
+  const access_token = await req.cookies.access_token; // check if access_token exists and save if it does, can be from github/google
   const refresh_token = await req.cookies.refresh_token; // check if refresh_token exists and save if it does
 
-  console.log("this is the cookie token: ", token); // testing token
+  // console.log("this is the cookie token: ", token); // testing token
   // console.log(access_token);
 
   // if neither of these exists them user hasn't created an account thus not verified

@@ -5,6 +5,7 @@ function getGithubUrl(props) {
     // redirect_uri will send this to node server at endpoint /oauth/github
     //  after verifing oauth credentials
     redirect_uri: import.meta.env.VITE_GITHUB_OAUTH_REDIRECT_URL,
+    // redirect_uri: import.meta.env.VITE_GITHUB_OAUTH_REDIRECT_URL_VERCEL,
     client_id: import.meta.env.VITE_GITHUB_CLIENT_ID,
     scope: "user:email",
   };
