@@ -19,6 +19,7 @@ const getGithubOAuthTokens = async ({ code }) => {
     // redirect_uri: process.env.GITHUB_OAUTH_REDIRECT_URI_VERCEL,
     redirect_uri: REDIRECT_URI,
   };
+
   try {
     const res = await axios.post(url, qs.stringify(values), {
       headers: {

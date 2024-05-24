@@ -23,6 +23,11 @@ const REDIRECT_URI =
     ? "https://user-auth-frontend-teal.vercel.app/secret"
     : "http://localhost:5173/secret";
 
+const CANCEL_URI =
+  process.env.NODE_ENV === "production"
+    ? "https://user-auth-frontend-teal.vercel.app/"
+    : "http://localhost:5173";
+
 /*
 // /////////// Passport Google Auth Routes
 
@@ -72,32 +77,40 @@ router.get("/oauth/google", async (req, res) => {
   // get the code from qs on the F.E. side
   const code = req.query.code;
 
-  // Use callback to get googleoauthtokens used to
-  //   get the id and access token from code
-  const { id_token, access_token, refresh_token } = await getGoogleOAuthTokens({
-    code,
-  });
+  try {
+    // Use callback to get googleoauthtokens used to
+    //   get the id and access token from code
+    const { id_token, access_token, refresh_token } =
+      await getGoogleOAuthTokens({
+        code,
+      });
 
-  // get google user data from google
-  const googleUser = await getGoogleUser(access_token);
-  // console.log("this is google user: ", googleUser);
-  // Check if google user already created a regular user
-  const user = await User.accountLink(googleUser, id_token, "google");
-  // console.log(user._id);
+    // get google user data from google
+    const googleUser = await getGoogleUser(access_token);
+    // console.log("this is google user: ", googleUser);
+    // Check if google user already created a regular user
+    const user = await User.accountLink(googleUser, id_token, "google");
+    // console.log(user._id);
 
-  // set cookies
-  createCookie(user._id, "token", res);
-  createCookie(access_token, "access_token", res);
-  createCookie(refresh_token, "refresh_token", res);
-  // res.cookie("access_token", ac_token, { httpOnly: true, maxAge: 60000 }); // 1 min for testing, ms time
-  // res.cookie("refresh_token", rf_Token, { httpOnly: true, maxAge: 180000 }); // 3 min for testing, ms time
+    // set cookies
+    createCookie(user._id, "token", res);
+    createCookie(access_token, "access_token", res);
+    createCookie(refresh_token, "refresh_token", res);
+    // res.cookie("access_token", ac_token, { httpOnly: true, maxAge: 60000 }); // 1 min for testing, ms time
+    // res.cookie("refresh_token", rf_Token, { httpOnly: true, maxAge: 180000 }); // 3 min for testing, ms time
 
-  //// redirect back to client
-  // localhost redirect
-  // res.redirect("http://localhost:5173/secret");
-  // vercel redirect
-  // res.redirect("https://user-auth-frontend-teal.vercel.app/secret");
-  res.redirect(REDIRECT_URI);
+    //// redirect back to client
+    // localhost redirect
+    // res.redirect("http://localhost:5173/secret");
+    // vercel redirect
+    // res.redirect("https://user-auth-frontend-teal.vercel.app/secret");
+    res.redirect(REDIRECT_URI);
+  } catch (error) {
+    console.error("User canceled google oauth: ", error);
+    // User canceled the OAuth process
+    res.redirect(CANCEL_URI);
+    return;
+  }
 });
 
 ///////////// Oauth github

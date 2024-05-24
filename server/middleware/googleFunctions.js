@@ -31,7 +31,7 @@ const getGoogleOAuthTokens = async ({ code }) => {
     // console.log(res.data);
     return res.data;
   } catch (error) {
-    console.error(error, "Failed to fetch Google Oauth Tokens");
+    console.log("Failed to fetch Google Oauth Tokens");
   }
 };
 
