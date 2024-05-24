@@ -17,6 +17,8 @@ function GeneralSettings(props) {
         <p>{props.email}</p>
         <h3>GOOGLE LINKED: </h3>
         <p>{props.googleLinked}</p>
+        <h3>GITHUB LINKED: </h3>
+        <p>{props.githubLinked}</p>
       </div>
     </>
   );

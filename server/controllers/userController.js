@@ -106,6 +106,7 @@ const userData = async (req, res) => {
         let data = {
           email: user.email,
           googleLink: user.googleId ? "Linked" : "Not Linked",
+          githubLinked: user.githubId ? "Linked" : "Not Linked",
         };
 
         if (user) return res.status(200).json({ userData: data });

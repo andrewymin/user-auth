@@ -44,6 +44,7 @@ function Dashboard(props) {
           <GeneralSettings
             email={state.user.email}
             googleLinked={state.user.googleLink}
+            githubLinked={state.user.githubLinked}
           />
         )}
         {activeTab === "security" && <SecuritySettings />}
