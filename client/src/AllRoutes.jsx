@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import React from "react";
+import React, { useEffect } from "react";
 import Index from "./pages/index";
 import Register from "./pages/register";
 import Login from "./pages/login";
@@ -8,8 +8,15 @@ import Secret from "./pages/secret";
 import VerificationCode from "./pages/verify";
 import Dashboard from "./pages/Dashboard";
 import ResetPassPage from "./pages/newPassword";
+import { useAuth } from "./context/AuthContext";
 
 function AllRoutes() {
+  const { authCheck } = useAuth();
+
+  useEffect(() => {
+    authCheck();
+  }, []);
+
   return (
     <Routes>
       <Route path="/" element={<Index />} />
