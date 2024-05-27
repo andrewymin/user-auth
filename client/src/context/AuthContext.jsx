@@ -107,7 +107,8 @@ export const AuthProvider = ({ children }) => {
         dispatch({ type: "USER", payload: res.data.userData });
       });
     } catch (error) {
-      notifyError(error.response.data.errorMsg);
+      // notifyError(error.response.data.errorMsg);
+      navigate("/");
     }
   };
 
