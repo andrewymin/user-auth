@@ -17,7 +17,8 @@ const loginUser = async (req, res) => {
 
     createCookie(user._id, "token", res);
     // res.cookie("token", token, { httpOnly: true, maxAge: 60000 });
-    res.status(200).json({ userData: { email: user.email } });
+    // res.status(200).json({ userData: { email: user.email } });
+    res.status(200).json({ authorized: true });
 
     // res.json({ msg: "got the data", isAuth: user });
     // res.status(200).json({ token: token });

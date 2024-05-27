@@ -5,10 +5,10 @@ import TopNav from "../components/topNav";
 function Secret(props) {
   const { authCheck } = useAuth();
 
-  useEffect(() => {
-    // 4/29 commented for testing
-    authCheck();
-  }, []);
+  // useEffect(() => {
+  //   // 4/29 commented for testing
+  //   authCheck();
+  // }, []);
 
   return (
     <div className="secret">

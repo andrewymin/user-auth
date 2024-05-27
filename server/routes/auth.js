@@ -151,7 +151,7 @@ router.get("/oauth/github", async (req, res) => {
 
 router.get("/protected-route", verifyUserToken, (req, res) => {
   // console.log(req.user); // req is from middleware req
-  res.status(200).json({ userData: { email: req.user } });
+  res.status(200).json({ authorized: true });
 });
 
 ///////////// Reset Password Token Check

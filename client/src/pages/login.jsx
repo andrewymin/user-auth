@@ -67,10 +67,6 @@ function Login() {
     psw?.setAttribute("type", type);
   };
 
-  const gh = () => {
-    console.log("github auth");
-  };
-
   const registerPage = () => {
     navigate("/register");
   };

@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Button from "../components/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function TopNav(props) {
   const [isOpen, setIsOpen] = useState(false);
-  const { logout } = useAuth();
+  const { logout, state, authCheck } = useAuth();
+  useEffect(() => {
+    authCheck();
+  }, []);
+
+  // console.log("this is from topNave: ", state.isAuthorized);
 
   var modalBtn = document.querySelector(".acct");
   var modal = document.querySelector(".acct-modal > ul");
@@ -24,17 +30,23 @@ function TopNav(props) {
       <Link className="homeLink" to={"/"}>
         Home
       </Link>
-
-      <div className="userOpt">
-        <button onClick={logout}>logout</button>
-        <button
-          className="acct"
-          style={{ backgroundColor: "transparent" }}
-          onClick={account}
-        >
-          🍔
-        </button>
-      </div>
+      {state.isAuthorized ? (
+        <div className="userOpt">
+          <button onClick={logout}>logout</button>
+          <button
+            className="acct"
+            style={{ backgroundColor: "transparent" }}
+            onClick={account}
+          >
+            🍔
+          </button>
+        </div>
+      ) : (
+        <div className="userOpt">
+          <Button name="login" />
+          <Button name="register" />
+        </div>
+      )}
       <div className={`acct-modal ${isOpen ? "open" : "close"}`}>
         <ul>
           <li>
