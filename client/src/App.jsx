@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-// import AllRoutes from "./allRoutes";
+import AllRoutes from "./allRoutes";
 import Index from "./pages/index";
 import Register from "./pages/register";
 import Login from "./pages/login";
@@ -16,8 +16,8 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        {/* <AllRoutes /> */}
-        <Routes>
+        <AllRoutes />
+        {/* <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -25,7 +25,7 @@ function App() {
           <Route path="/secret" element={<Secret />} />
           <Route path="/dashboard/:cat" element={<Dashboard />} />
           <Route path="/password-reset/:token" element={<ResetPassPage />} />
-        </Routes>
+        </Routes> */}
       </AuthProvider>
     </BrowserRouter>
   );
