@@ -22,7 +22,12 @@ const corsOptionsProd = {
   origin: "https://user-auth-frontend-teal.vercel.app", // Explicitly allow your frontend domain
   methods: "GET, POST, PUT, DELETE, OPTIONS", // Specify allowed methods as needed
   credentials: true, // If your frontend needs to send cookies or credentials with the request
-  allowedHeaders: ["X-Requested-With", "Content-Type", "Authorization"], // Specify allowed headers
+  allowedHeaders: [
+    "X-Requested-With",
+    "Content-Type",
+    "Authorization",
+    "Accept",
+  ], // Specify allowed headers
 };
 
 ///////////// cors option for Localhost
