@@ -13,8 +13,7 @@ const createToken = (_id) => {
 const prodCookieSettings = {
   httpOnly: true,
   /////////// comment out sameSite and secure for localhost
-  // 6/03 changing this to "strict" from "none" to test
-  sameSite: "Strict", // makes it possible to do cross-site calls for creation and req.cookies
+  sameSite: "none", // makes it possible to do cross-site calls for creation and req.cookies
   secure: true, // Need this for sameSite: "none" to work, will return 'true'
   maxAge: MAX_AGE,
 };
@@ -33,7 +32,7 @@ const prodDeleteCookieSettings = {
   httpOnly: true,
   /////////// comment out sameSite and secure for localhost
   // 6/03 changing this to "strict" from "none" to test
-  sameSite: "Strict", // makes it possible to do cross-site calls for creation and req.cookies
+  sameSite: "none", // makes it possible to do cross-site calls for creation and req.cookies
   secure: true, // Need this for sameSite: "none" to work
   path: "/",
 };
