@@ -57,4 +57,5 @@ const deleteCookie = (name, res) => {
   return res.clearCookie(name, deleteCookieOptions);
 };
 
-export { createCookie, deleteCookie };
+// export { createCookie, deleteCookie };
+export { createToken };

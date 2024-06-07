@@ -81,42 +81,6 @@ const TempUser = mongoose.model("tempUser", tempUserSchema); // creating model o
 
 ///////////// static signup method/function being created
 // to be able to use the this keyword MUST use a regular function instead of an arrow funnction
-// userSchema.statics.signup = async function (email, password) {
-//   // Validation
-
-//   // commented out for oauth integration for no password requirement
-//   if (!email || !password) {
-//     throw Error("All fields must be filled"); // even though password isn't required in modal this prevents any empty password
-//   }
-//   if (!validator.isEmail(email)) {
-//     throw Error("Email is not valid");
-//   }
-//   // commented out this for testing the jwt in userController
-//   // if (!validator.isStrongPassword(password)) {
-//   //   throw Error("Password not strong enough");
-//   // }
-
-//   const exists = await this.findOne({ email });
-
-//   if (exists) {
-//     throw Error("Email already in use");
-//   }
-//   // const salt = await bycrpt.genSalt(saltRounds);
-//   const hash = await bycrpt.hash(password, 10);
-
-//   // console.log(email)
-//   // console.log(hash)
-
-//   // input passport validation here since if the logic gets here
-//   //   then it has passed all the errors
-
-//   const newUser = await this.create({
-//     email,
-//     password: hash,
-//   });
-//   return newUser;
-// };
-
 userSchema.statics.signup = async function (email, password) {
   // even though password isn't required in modal this prevents any empty password
   if (!email || !password) {
@@ -138,7 +102,7 @@ userSchema.statics.signup = async function (email, password) {
     const newCode = generateRandomSixDigitNumber();
     console.log("This is new code if temp already exists: ", newCode);
     const updatedTempUser = await TempUser.findOneAndUpdate(
-      { email: tempExists.email },
+      // { email: tempExists.email },
       {
         verificationCode: { vCode: newCode, expireAt: EXPIRE_AGE },
       },

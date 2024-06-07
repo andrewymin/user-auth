@@ -5,9 +5,16 @@ import { getGoogleUser, getNewAccessToken } from "./googleFunctions.js";
 ///////////// Verify Middleware for protected routes
 
 const verifyUserToken = async (req, res, next) => {
-  const token = await req.cookies.token; // using cookie-parser package to get cookie easier by name
-  const access_token = await req.cookies.access_token; // check if access_token exists and save if it does, can be from github/google
-  const refresh_token = await req.cookies.refresh_token; // check if refresh_token exists and save if it does
+  ///// COOKIE AUTH
+  // const token = await req.cookies.token; // using cookie-parser package to get cookie easier by name
+  // const access_token = await req.cookies.access_token; // check if access_token exists and save if it does, can be from github/google
+  // const refresh_token = await req.cookies.refresh_token; // check if refresh_token exists and save if it does
+
+  //// TOKEN AUTH LOCALSTORAGE
+  const tokens = req.headers.authorization.split(" "); // all tokens sent from localStorage
+  const token = tokens[1];
+  const access_token = tokens[2];
+  const refresh_token = tokens[3];
 
   // console.log("this is the cookie token: ", token); // testing token
   // console.log(access_token);
@@ -44,7 +51,7 @@ const verifyUserToken = async (req, res, next) => {
         if (err) return res.status(401);
         const user = await User.findById(decodedToken._id);
         // setting req.user to email of user for rest of function of connected route
-        if (user) req.user = user.email;
+        if (user) req.user = true;
         else return res.status(401);
 
         next(); // continue to rest of function of connected route

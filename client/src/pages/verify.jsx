@@ -32,19 +32,53 @@ const VerificationCode = ({ length = 6 }) => {
   // References to input fields
   const inputsRef = useRef([]);
 
+  //////// COOKIE AUTH
+  // const onComplete = async (userCode) => {
+  //   // Send an axios call to server to check if mongo User code matches
+  //   console.log(userCode);
+  //   try {
+  //     await customAxios
+  //       .post("verification/verifyCode", {
+  //         userCode: userCode,
+  //       })
+  //       .then((res) => {
+  //         // dispatch({ type: "IS_AUTH", payload: res.data.isAuth });
+  //         console.log(res.data.msg);
+  //         // sending to home page since the cookie for auth will be created on B.E.
+  //         navigate(`/`);
+  //       });
+  //   } catch (err) {
+  //     // toastify will only work with toastContainer! don't forget
+  //     showError(err.response.data);
+  //     console.log(err.response.data);
+  //   }
+  // };
+
+  /////// TOKEN AUTH LOCALSTORAGE
   const onComplete = async (userCode) => {
     // Send an axios call to server to check if mongo User code matches
-    console.log(userCode);
+    // console.log(userCode);
+    const verifyToken = localStorage.getItem("verifyToken");
     try {
       await customAxios
-        .post("verification/verifyCode", {
-          userCode: userCode,
-        })
+        .post(
+          "verification/verifyCode",
+          {
+            userCode: userCode,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${verifyToken}`,
+            },
+          }
+        )
         .then((res) => {
           // dispatch({ type: "IS_AUTH", payload: res.data.isAuth });
+          localStorage.setItem("token", res.data.token);
+          localStorage.removeItem("verifyToken");
           console.log(res.data.msg);
           // sending to home page since the cookie for auth will be created on B.E.
-          navigate(`/`);
+          navigate(`/secret`);
         });
     } catch (err) {
       // toastify will only work with toastContainer! don't forget

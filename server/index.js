@@ -39,7 +39,11 @@ const corsOptionsLocal = {
 ///////////// mongoose Production uri
 const mongoose_prod = process.env.MONGO_URI;
 ///////////// mongoose Localhost uri
-const mongoose_local = "mongodb://127.0.0.1:27017/jwtAuth";
+
+///// COOKIE AUTH
+// const mongoose_local = "mongodb://127.0.0.1:27017/jwtAuth";
+//// TOKEN AUTH LOCALSTORAGE
+const mongoose_local = "mongodb://127.0.0.1:27017/localStorageToken";
 
 ///////////// Setting cors_option based on NODE_ENV value
 const CORS_OPTIONS =

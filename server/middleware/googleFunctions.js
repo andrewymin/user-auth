@@ -1,6 +1,7 @@
 import axios from "axios";
 import qs from "qs";
-import { createCookie } from "../hooks/jwtCookie.js";
+// import { createCookie } from "../hooks/jwtCookie.js";
+import { createToken } from "../hooks/jwtCookie.js";
 // import { createToken } from "../controllers/userController.js";
 
 const REDIRECT_URI =
@@ -64,11 +65,14 @@ const getNewAccessToken = async (refresh_token, res) => {
     const response = await axios.post(url, qs.stringify(values));
     // console.log(res.data);
     const newAccessToken = response.data.access_token;
-
-    createCookie(newAccessToken, "access_token", res);
+    //// Create Cookie for httponly
+    // createCookie(newAccessToken, "access_token", res);
+    //// Create token for localStorage
+    const jwtNewAccessToken = createToken(newAccessToken);
 
     // console.log(newAccessToken);
-    return newAccessToken;
+    // return newAccessToken;
+    return jwtNewAccessToken;
   } catch (error) {
     console.error(error, "Failed to make new access token from refresh token.");
   }

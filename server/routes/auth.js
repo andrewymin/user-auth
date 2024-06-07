@@ -7,13 +7,14 @@ import {
   getGoogleUser,
   getGoogleOAuthTokens,
 } from "../middleware/googleFunctions.js";
-// import { createToken } from "../controllers/userController.js";
-import { createCookie } from "../hooks/jwtCookie.js";
+import { createToken } from "../hooks/jwtCookie.js";
+// import { createCookie } from "../hooks/jwtCookie.js";
 import { User, ResetEmail } from "../models/userModel.js";
 import {
   getGithubOAuthTokens,
   getGithubUser,
 } from "../middleware/githubFunctions.js";
+import { resetPassword } from "../controllers/userController.js";
 
 //////////// DONT FORGET TO CHANGE PRODUCTION SETTINGS IN COOKIE CREATION AND DELETION FUNCIONS
 
@@ -151,7 +152,7 @@ router.get("/oauth/github", async (req, res) => {
 
 router.get("/protected-route", verifyUserToken, (req, res) => {
   // console.log(req.user); // req is from middleware req
-  res.status(200).json({ authorized: true });
+  res.status(200).json({ authorized: req.user });
 });
 
 ///////////// Reset Password Token Check

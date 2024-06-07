@@ -8,7 +8,7 @@ function TopNav(props) {
   const { logout, state, authCheck } = useAuth();
   useEffect(() => {
     authCheck();
-  }, []);
+  }, [state.isAuthorized]);
 
   // console.log("this is from topNave: ", state.isAuthorized);
 

@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
 import bycrpt from "bcrypt";
 import { ResetEmail, User } from "../models/userModel.js";
-import { createCookie, deleteCookie } from "../hooks/jwtCookie.js";
+// import { createCookie, deleteCookie } from "../hooks/jwtCookie.js";
+import { createToken } from "../hooks/jwtCookie.js";
 import { resetPasswordEmail } from "../hooks/verifyCodeGen.js";
 import crypto from "crypto";
 
@@ -15,10 +16,14 @@ const loginUser = async (req, res) => {
     //create a token
     // const token = createToken(user._id);
 
-    createCookie(user._id, "token", res);
     // res.cookie("token", token, { httpOnly: true, maxAge: 60000 });
     // res.status(200).json({ userData: { email: user.email } });
-    res.status(200).json({ authorized: true });
+    ///// COOKIE AUTH
+    // createCookie(user._id, "token", res);
+    // res.status(200).json({ authorized: true });
+    ///// TOKEN AUTH LOCALSTORAGE
+    const token = createToken(user._id);
+    res.status(200).json({ authorized: true, token: token });
 
     // res.json({ msg: "got the data", isAuth: user });
     // res.status(200).json({ token: token });
@@ -40,38 +45,26 @@ const signupUser = async (req, res) => {
     // const verifyToken = createToken(user._id);
     // if (token) console.log("made token?"); // this is for testing
     // res.cookie("verifyToken", verifyToken, { httpOnly: true, maxAge: MAX_AGE });
-    createCookie(user._id, "verifyToken", res);
-    res.status(200).json({ msg: "Need to verify first." });
-    // res.status(200).json({ msg: "added user", isAuth: user });
+
+    ///// COOKIE AUTH
+    // createCookie(user._id, "verifyToken", res);
+    // res.status(200).json({ msg: "Need to verify first." });
+    // // res.status(200).json({ msg: "added user", isAuth: user });
+
+    //// TOKEN AUTH LOCALSTORAGE
+    const token = createToken(user._id); // this is the verifyToken
+    res.status(200).json({ msg: "Need to verify first.", verifyToken: token });
   } catch (error) {
     // console.log(error.message);
     res.status(400).json({ errorMsg: error.message });
   }
 };
 
-// const signupUser = async (req, res) => {
-//   const username = await req.body.userID;
-//   const password = await req.body.userPass;
+//// TOKEN AUTH LOCALSTORAGE
+// No need for logout user, just localStorage.removeItem('token') on client
 
-//   try {
-//     const user = await User.signup(username, password);
-//     //create a token
-//     const token = createToken(user._id);
-//     if (token) console.log("made token?"); // this is for testing
-//     res.cookie("token", token, { httpOnly: true, maxAge: 60000 });
-//     res.status(200).json({ msg: "Added User" });
-//     // res.status(200).json({ msg: "added user", isAuth: user });
-//   } catch (error) {
-//     // console.log(error.message);
-//     res.status(400).json({ errorMsg: error.message });
-//   }
-
-//   // res.json({mssg: 'signup user'})
-//   // res.json({email: email, password: password});
-//   // console.log(`${email} ${password}`)
-// };
-
-///////////// logout user
+///// COOKIE AUTH
+// ///////////// logout user
 const logoutUser = (req, res, next) => {
   // console.log("am I getting to this route");
   try {
@@ -92,7 +85,13 @@ const logoutUser = (req, res, next) => {
 
 ///////////// Retrieve Profile Data
 const userData = async (req, res) => {
-  const token = req.cookies.token;
+  ///// COOKIE AUTH
+  // const token = req.cookies.token;
+
+  //// TOKEN AUTH LOCALSTORAGE
+
+  const token = await req.headers.authorization.split(" ")[1];
+
   if (!token) {
     console.log("no token");
   } else {
@@ -121,7 +120,12 @@ const userData = async (req, res) => {
 const resetPasswordLink = async (req, res) => {
   const username = await req.body.userID; // check if link was accessed from login page
   // console.log(username);
-  const token = await req.cookies.token; // check if link was accessed from account security page
+  ///// COOKIE AUTH
+  // const token = await req.cookies.token; // check if link was accessed from account security page
+
+  //// TOKEN AUTH LOCALSTORAGE
+  const token = req.header.authorization.split(" ")[1];
+
   if (username) {
     // sent from login page with email
     const user = await User.findOne({ email: username });

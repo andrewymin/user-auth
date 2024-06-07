@@ -21,10 +21,11 @@ router.post("/signup", signupUser);
 
 ///////////// logout route
 router.get("/logout", logoutUser, (req, res) => {
-  res.status(200).json({ isUser: false }); // sending success status after clearing cookies
+  // sending success status after clearing cookies
+  res.status(200).json({ isUser: false });
 });
 
-///////////// logout route
+///////////// Cookie test route
 router.get("/cookie", checkCookie);
 
 ///////////// Data route
