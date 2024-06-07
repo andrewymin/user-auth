@@ -25,7 +25,7 @@ const verifyUserToken = async (req, res, next) => {
         if (err) return res.status(401);
         const newAccessToken = await getNewAccessToken(decodedToken._id, res);
         const googleUser = await getGoogleUser(newAccessToken);
-        if (googleUser) req.user = googleUser.email;
+        if (googleUser) req.user = true;
         else return res.status(401);
         // Token is valid; proceed to the next middleware/route handler
         next();
@@ -43,9 +43,9 @@ const verifyUserToken = async (req, res, next) => {
         //   req.user_id = decodedToken._id;
         if (err) return res.status(401);
         const user = await User.findById(decodedToken._id);
-        // setting req.user to email of user for rest of function of connected route
-        if (user) req.user = user.email;
-        else return res.status(401);
+        // setting req.user to true since cookie was validated
+        if (user) req.user = true;
+        else return res.status(401); // cookie was not validated thus not allowed access
 
         next(); // continue to rest of function of connected route
       }
@@ -62,7 +62,7 @@ const verifyUserToken = async (req, res, next) => {
         if (err) return res.status(401);
         const googleUser = await getGoogleUser(decodedToken._id);
         // console.log(googleUser); // check why it logs 4 times
-        if (googleUser) req.user = googleUser.email;
+        if (googleUser) req.user = true;
         else return res.status(401);
         // Token is valid; proceed to the next middleware/route handler
         next();

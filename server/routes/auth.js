@@ -150,8 +150,9 @@ router.get("/oauth/github", async (req, res) => {
 ///////////// Protected Routes
 
 router.get("/protected-route", verifyUserToken, (req, res) => {
-  // console.log(req.user); // req is from middleware req
-  res.status(200).json({ authorized: true });
+  // middleware can set the 'req' here thus 'req.user' is set to true in
+  //   middleware if cookie is validated
+  res.status(200).json({ authorized: req.user });
 });
 
 ///////////// Reset Password Token Check

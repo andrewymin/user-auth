@@ -13,12 +13,6 @@ import NotFound from "./pages/NotFound";
 import { useAuth } from "./context/AuthContext";
 
 function AllRoutes() {
-  const { authCheck } = useAuth();
-
-  useEffect(() => {
-    authCheck();
-  }, []);
-
   return (
     <Routes>
       <Route path="/" element={<Index />} exact />

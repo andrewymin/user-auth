@@ -116,17 +116,12 @@ export const AuthProvider = ({ children }) => {
     // console.log(state.user, state.pwd);
     try {
       await customAxios.get("auth/protected-route").then((res) => {
-        // TODO: check what actually gets send back to payload to fix
-        //  this should just be false or true
+        // after checking cookie on server side if good, set IS_AUTH true
         dispatch({ type: "IS_AUTH", payload: res.data.authorized });
       });
     } catch (error) {
+      // cookie was found not good/some error happened, set IS_AUTH false
       dispatch({ type: "IS_AUTH", payload: false });
-      // console.log(error.response);
-      // may need to change this to only naviagte to home if not already
-      //  on home page to stop double load even with useEffect
-      //  Or get rid of this for a privateRoute strat.
-      navigate("/");
     }
   };
 

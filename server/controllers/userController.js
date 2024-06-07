@@ -5,6 +5,13 @@ import { createCookie, deleteCookie } from "../hooks/jwtCookie.js";
 import { resetPasswordEmail } from "../hooks/verifyCodeGen.js";
 import crypto from "crypto";
 
+const localResetEmailLink = `http://localhost:5173/password-reset/`;
+const ProdResetEmailLink = `https://user-auth-frontend-teal.vercel.app/password-reset/`;
+const EmailResetLink =
+  process.env.NODE_ENV === "production"
+    ? ProdResetEmailLink
+    : localResetEmailLink;
+
 ///////////// login user
 const loginUser = async (req, res) => {
   const username = await req.body.userID;
@@ -188,11 +195,9 @@ const resetPasswordPage = async (req, res) => {
   try {
     const user = await ResetEmail.findOne({ token: token });
     if (!user) return res.status(404).json({ errorMsg: "User not found" });
-    // redirect to frontend password change component if link is still good
-    // res.redirect(`http://localhost:5173/password-reset/${token}`);
-    res.redirect(
-      `https://user-auth-frontend-teal.vercel.app/password-reset/${token}`
-    );
+    // redirect to frontend password change component if link is still goods
+    const EmailResetLinkWithToken = EmailResetLink.concat(token);
+    res.redirect(EmailResetLinkWithToken);
   } catch (error) {
     console.log(error);
   }
