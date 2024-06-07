@@ -8,6 +8,8 @@ import Secret from "./pages/secret";
 import VerificationCode from "./pages/verify";
 import Dashboard from "./pages/Dashboard";
 import ResetPassPage from "./pages/newPassword";
+import Protected from "./components/Protected";
+import NotFound from "./pages/NotFound";
 import { useAuth } from "./context/AuthContext";
 
 function AllRoutes() {
@@ -19,15 +21,18 @@ function AllRoutes() {
 
   return (
     <Routes>
-      <Route path="/" element={<Index />} />
+      <Route path="/" element={<Index />} exact />
       {/* <Route path="/google/callback" element={<Google />} /> */}
       {/* <Route path="/account-link/:acId/:acTk" element={<AccountLink />} /> */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/verify" element={<VerificationCode />} />
-      <Route path="/secret" element={<Secret />} />
-      <Route path="/dashboard/:cat" element={<Dashboard />} />
-      <Route path="/password-reset/:token" element={<ResetPassPage />} />
+      <Route element={<Protected />}>
+        <Route path="/secret" element={<Secret />} />
+        <Route path="/verify" element={<VerificationCode />} />
+        <Route path="/dashboard/:cat" element={<Dashboard />} />
+        <Route path="/password-reset/:token" element={<ResetPassPage />} />
+      </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
