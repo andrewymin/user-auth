@@ -221,7 +221,6 @@ const resetPassword = async (req, res) => {
 
       await user.save();
       resetUser.deleteOne();
-      // TODO: DELETE resetEmail user
       return res.status(200).json({ msg: "updated password" });
     }
     return res

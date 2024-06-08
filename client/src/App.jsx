@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-import AllRoutes from "./allRoutes";
+import AllRoutes from "./AllRoutes";
 ///////// Uncomment if not using Allroutes component if its causing deployment problems
 // import Index from "./pages/index";
 // import Register from "./pages/register";
